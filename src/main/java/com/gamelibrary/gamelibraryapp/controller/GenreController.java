@@ -44,6 +44,19 @@ public Genre createGenre(@PathVariable Genre genreObject) {
         return genreRepository.save(genreObject);
 }
 
+public Genre updateGenre(@PathVariable genre genreId) Long genreId, @RequestBody genre genreObject) {
+        LOGGER.info("Calling updateGenre method from controller");
+        Optional<Genre> genre = genreRepository.findById(genreId);
+        if (genre.isPresent()) {
+            if (genreObject.getName().equals(genre.get().getName())) {
+                throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
+            } else {
+                Genre updateGenre = genreRepository.findById(genreId).get();
+                updateGenre.setName(genreObject.getName());
+            }
+        }
+    }
+
 }
 
 
