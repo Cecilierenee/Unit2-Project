@@ -73,4 +73,16 @@ public class DeveloperService {
 
     }
 
+    public Optional<Developer> deleteDeveloper(Long developerId) {
+        LOGGER.info("calling deleteDeveloper method from service");
+        Optional<Developer> developer = developerRepository.findById(developerId);
+        if (developer.isPresent()) {
+            developerRepository.deleteById(developerId);
+            return developer;
+        } else {
+            throw new InformationNotFoundException("developer with id " + developerId + " is not found");
+        }
+
+    }
+
 }
