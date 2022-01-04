@@ -6,6 +6,7 @@ import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,4 +49,17 @@ public class GenreService {
         } else {
             return genreRepository.save(genreObject);
         }}
+    public Genre updateGenre() {
+        LOGGER.info("Calling updateGenre method from service");
+        Genre genre = genreRepository.findById(genreId);
+        if(genre != null) {
+            if (genreObject.getName().equals(genre.get().getName())) {
+                throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
+            } else {
+                updateGenre = genreRepository.findById(genreId).get();
+                updateGenre.setName(genreObject.getName());
+            }
+        }
+        return genreRepository.save(updateGenre);
+    }
 }
