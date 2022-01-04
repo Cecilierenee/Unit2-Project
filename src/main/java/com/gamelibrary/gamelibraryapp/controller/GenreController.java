@@ -5,6 +5,7 @@ import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
+import com.gamelibrary.gamelibraryapp.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +13,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+
+
 @RestController
 @RequestMapping(path = "/api")
 public class GenreController {
     private static final Logger LOGGER = Logger.getLogger(GenreController.class.getName());
     private GenreRepository genreRepository;
+
+@Autowired
+    public void setGenreService(GenreService genreService) {
+        this.genreService;
+    }
 
 
 @GetMapping(path = "/genre")
@@ -58,7 +66,7 @@ public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @Request
     }
     return genreRepository.save(updateGenre);
 }
-
+@DeleteMapping(path = "/genre/{genreId}")
 public Optional<Genre> deleteGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling deleteGenre method from controller");
     Optional<Genre> genre = genreRepository.findById(genreId);
