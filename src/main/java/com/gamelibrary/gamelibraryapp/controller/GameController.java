@@ -4,6 +4,7 @@ import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
+import com.gamelibrary.gamelibraryapp.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,17 +18,24 @@ public class GameController {
 
     private static final Logger LOGGER = Logger.getLogger(GameController.class.getName());
     private GameRepository gameRepository;
+    private GameService gameService;
+
 
     @Autowired
     public void setGameRepository(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 
+    @Autowired
+    public void setGameService(GameService gameService){
+        this.gameService = gameService;
+    }
+
 
     @GetMapping(path = "/game/")
     public List<Game> getGames() {
         LOGGER.info("calling getGames method from controller");
-        return gameRepository.findAll();
+        return gameService.getGames();
 
     }
 
@@ -89,5 +97,5 @@ public class GameController {
 
     }
 
-    
+
 }
