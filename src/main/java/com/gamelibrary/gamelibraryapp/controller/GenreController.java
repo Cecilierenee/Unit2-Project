@@ -42,20 +42,22 @@ public Genre createGenre(@PathVariable Genre genreObject) {
         throw new InformationExistException("Genre with" + genre.getName() + "already exist");
     } else {
         return genreRepository.save(genreObject);
-}
-
-public Genre updateGenre(@PathVariable genre genreId) Long genreId, @RequestBody genre genreObject) {
-        LOGGER.info("Calling updateGenre method from controller");
-        Optional<Genre> genre = genreRepository.findById(genreId);
-        if (genre.isPresent()) {
-            if (genreObject.getName().equals(genre.get().getName())) {
-                throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
-            } else {
-                Genre updateGenre = genreRepository.findById(genreId).get();
-                updateGenre.setName(genreObject.getName());
-            }
+}}
+@PutMapping(path = "/genre/{genreId}")
+public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @RequestBody Genre genreObject) {
+    LOGGER.info("Calling updateGenre method from controller");
+    Optional<Genre> genre = genreRepository.findById(genreId);
+    Genre updateGenre = null;
+    if (genre.isPresent()) {
+        if (genreObject.getName().equals(genre.get().getName())) {
+            throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
+        } else {
+            updateGenre = genreRepository.findById(genreId).get();
+            updateGenre.setName(genreObject.getName());
         }
     }
+    return genreRepository.save(updateGenre);
+}
 
 }
 
