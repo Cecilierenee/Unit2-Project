@@ -4,10 +4,13 @@ import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
+import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +53,24 @@ public class DeveloperService {
         } else {
             return developerRepository.save(developerObject);
         }
+    }
+
+    public Developer updateDeveloper(Long developerId,  Developer developerObject) {
+        LOGGER.info("calling updateDeveloper method from service");
+        Optional<Developer> developer = developerRepository.findById(developerId);
+        if (developer.isPresent()) {
+            if (developerObject.getName().equals(developer.get().getName())) {
+                throw new InformationExistException("developer " + developer.get().getName() + " already exist");
+            } else {
+                Developer updateDeveloper = developerRepository.findById(developerId).get();
+                updateDeveloper.setName(developerObject.getName());
+
+                return developerRepository.save(updateDeveloper);
+            }
+        } else {
+            throw new InformationNotFoundException("developer with id " + developerId + " not found");
+        }
+
     }
 
 }
