@@ -6,10 +6,7 @@ import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,9 +34,10 @@ public Optional getGenre(@PathVariable Long genreId) {
         throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
     }
 }
+@PostMapping(path = "/genre")
 public Genre createGenre(@PathVariable Genre genreObject) {
     LOGGER.info("Calling createGenre method from controller");
-    Genre genre = genreRepository.findByID(genreObject.getName());
+    Genre genre = genreRepository.findByName(genreObject.getName());
     if (genre != null) {
         throw new InformationExistException("Genre with" + genre.getName() + "already exist");
     } else {
