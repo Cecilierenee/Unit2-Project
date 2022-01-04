@@ -17,14 +17,8 @@ import java.util.logging.Logger;
 public class GameController {
 
     private static final Logger LOGGER = Logger.getLogger(GameController.class.getName());
-    private GameRepository gameRepository;
+
     private GameService gameService;
-
-
-    @Autowired
-    public void setGameRepository(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
-    }
 
     @Autowired
     public void setGameService(GameService gameService){
