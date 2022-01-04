@@ -1,12 +1,30 @@
 package com.gamelibrary.gamelibraryapp.model;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 public class Game {
 
+    @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String name;
+
+    @Column
     private String description;
+
+    @Column
     private int price;
+
+    @Column
     private String releaseDate;
+
+    @Column
     private char rating;
 
     public Game(Long id, String name, String description, int price, String releaseDate, char rating) {
