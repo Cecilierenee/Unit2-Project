@@ -1,5 +1,6 @@
 package com.gamelibrary.gamelibraryapp.service;
 
+import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
@@ -22,7 +23,7 @@ public class GenreService {
     }
 
     public Optional getGenre() {
-        LOGGER.info("Calling getGenre method from controller");
+        LOGGER.info("Calling getGenre method from service");
         Optional<Genre> genre = genreRepository.findById(genreId);
         if (genre.isPresent()) {
             return genre;
@@ -31,7 +32,7 @@ public class GenreService {
         }
 }
     public List<Game> getGamesInGenre() {
-        LOGGER.info("Calling getGamesInGenre method from controller");
+        LOGGER.info("Calling getGamesInGenre method from service");
         Genre genre = genreRepository.findById(genreId).get();
         if(genre != null) {
             return genre.gameList;
@@ -39,4 +40,12 @@ public class GenreService {
             throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
         }
     }
+    public Genre createGenre() {
+        LOGGER.info("Calling createGenre method from service");
+        Genre genre = genreRepository.findByName(genreObject.getName());
+        if (genre != null) {
+            throw new InformationExistException("Genre with" + genre.getName() + "already exist");
+        } else {
+            return genreRepository.save(genreObject);
+        }}
 }
