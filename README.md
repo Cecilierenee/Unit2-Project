@@ -56,7 +56,7 @@ We want to build a working database with four models: Game, Genre, Developer, an
 |--------------|------|--------|----------------|--------|-------------|
 |GET | /game|Get all games|None|Public| |
 |GET| /game{gameid}|Get single game|None|Public| |
-|POST| /publisher/{publisherid}/developer/{debveloperid}/genre/{genreid}/game|Create single game|None|Public| | 
+|POST| /game|Create single game|None|Public| | 
 |PUT| /game/{gameid}|Update single game|None|Public||
 |DELETE| /game/{gameid}| Delete single game|None|Public||
 |GET| /developer|Get all developers|None|Public||
