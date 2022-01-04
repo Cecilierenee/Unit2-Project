@@ -3,7 +3,9 @@ package com.gamelibrary.gamelibraryapp.controller;
 
 import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
+import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
+import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
 import com.gamelibrary.gamelibraryapp.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,15 @@ public Optional getGenre(@PathVariable Long genreId) {
         throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
     }
 }
+public List<Game> getGamesInGenre(@PathVariable Long genreId) {
+    LOGGER.info("Calling getGamesInGenre method from controller");
+    Optional<Genre> genre = genreRepository.findById(genreId);
+    if (genre.isPresent()){
+        return genreService.getSongsinGenre(genreId);
+    } else {
+        throw new InformationNotFoundException("Genre with " + genreId + " does not contain any games");
+    }
+}
 @PostMapping(path = "/genre")
 public Genre createGenre(@PathVariable Genre genreObject) {
     LOGGER.info("Calling createGenre method from controller");
@@ -51,6 +62,7 @@ public Genre createGenre(@PathVariable Genre genreObject) {
     } else {
         return genreRepository.save(genreObject);
 }}
+
 @PutMapping(path = "/genre/{genreId}")
 public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @RequestBody Genre genreObject) {
     LOGGER.info("Calling updateGenre method from controller");
