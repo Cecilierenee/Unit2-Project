@@ -77,3 +77,9 @@ We want to build a working database with four models: Game, Genre, Developer, an
 |POST| /genre|Create a genre|None|Public||
 |PUT| /genre/{genreid}|Update a genre|None|Public||
 |DELETE| /genre/{genreid}|Delete a genre|None|Public||
+
+## ERD
+![ERD](https://user-images.githubusercontent.com/89564513/148101262-90f32935-b756-4592-9b11-83e70f491fcc.png)
+
+
+![The Process](https://user-images.githubusercontent.com/89564513/148101651-29730772-c08e-40aa-b7ac-b798a3ff510b.png)
