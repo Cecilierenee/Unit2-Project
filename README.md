@@ -49,4 +49,31 @@ We want to build a working database with four models: Game, Genre, Developer, an
  ERD |Debugging| 
  Endpoints| MVP(?)|
  Set up Repo|
+ 
+## /EndPoints
 
+| Request Type | Url  | Action | Request Header | Access | Request Body|
+|--------------|------|--------|----------------|--------|-------------|
+|GET | /game|Get all games|None|Public| |
+|GET| /game{gameid}|Get single game|None|Public| |
+|POST| /publisher/{publisherid}/developer/{debveloperid}/genre/{genreid}/game|Create single game|None|Public| | 
+|PUT| /game/{gameid}|Update single game|None|Public||
+|DELETE| /game/{gameid}| Delete single game|None|Public||
+|GET| /developer|Get all developers|None|Public||
+|GET| /developer/{developerid}|Get single developer|None|Public||
+|GET| /developer/{developerid}/games|Get all games created by a single developer|None|Public||
+|GET| /developer/{developerid}/games/{gameid}|Get single game single developer|None|Public||
+|POST| /publisher/{publisherid}developer|Create single developer|None|Public||
+|PUT| /developer/{developerid}|Update single developer|None|Public||
+|DELETE| /developer/{developerid}|Delete single developer|None|Public||
+|GET| /publisher|Get all publishers|None|Public||
+|GET| /publisher/{publisherid}|Get single publisher|None|Public||
+|POST| /publisher|Create single publisher|None|Public||
+|PUT| /publisher/{publisherid}|Update single publisher|None|Public||
+|DELETE| /publisher/{publisherid}|Delete single publisher|None|Public||
+|GET| /genre|Get all genres|None|Public||
+|GET| /genre/{genreid}|Get single genre|None|Public||
+|Get| /genre/{genreid}/game|Get all games within a single genre|None|Public||
+|POST| /genre|Create a genre|None|Public||
+|PUT| /genre/{genreid}|Update a genre|None|Public||
+|DELETE| /genre/{genreid}|Delete a genre|None|Public||
