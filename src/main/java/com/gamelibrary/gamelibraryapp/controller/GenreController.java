@@ -34,7 +34,7 @@ public List<Genre> getGenres() {
     LOGGER.info("Calling getGenres method from controller");
     return genreRepository.findAll();
 }
-//Calls the serivce class to get all genres in the model
+//Calls the service class to get all genres in the model
 @GetMapping(path = "/genre/{genreId}")
 public Optional getGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGenre method from controller");
