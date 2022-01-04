@@ -52,4 +52,13 @@ public class Developer {
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<Game> getGameList(){
+        return gameList;
+    }
+    public void setGameList(List<Game> gameList){
+        this.gameList = gameList;
+    }
+
+
 }
