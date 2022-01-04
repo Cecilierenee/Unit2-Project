@@ -1,4 +1,7 @@
 package com.gamelibrary.gamelibraryapp.repository;
 
-public interface GameRepository {
+import com.gamelibrary.gamelibraryapp.model.Game;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface GameRepository extends JpaRepository<Game, Long> {
 }

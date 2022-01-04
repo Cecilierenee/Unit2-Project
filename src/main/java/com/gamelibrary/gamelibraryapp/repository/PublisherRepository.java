@@ -1,4 +1,7 @@
 package com.gamelibrary.gamelibraryapp.repository;
 
-public interface PublisherRepository {
+import com.gamelibrary.gamelibraryapp.model.Publisher;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PublisherRepository extends JpaRepository<Publisher, Long> {
 }
