@@ -3,7 +3,6 @@ package com.gamelibrary.gamelibraryapp.controller;
 import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.service.DeveloperService;
-import com.gamelibrary.gamelibraryapp.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +42,20 @@ public class DeveloperController {
     public Developer createDeveloper(@RequestBody Developer developerObject) {
         LOGGER.info("calling createDeveloper method from controller");
         return developerService.createDeveloper(developerObject);
+    }
+
+    @PutMapping(path = "/developer/{developerId}")
+    public Developer updateDeveloper(@PathVariable(value = "developerId") Long developerId, @RequestBody Developer developerObject) {
+        LOGGER.info("calling updateDeveloper method from controller");
+        return developerService.updateDeveloper(developerId,developerObject);
+
+    }
+
+    @DeleteMapping(path = "/developer/{developerId}")
+    public Optional<Developer> deleteDeveloper(@PathVariable Long developerId) {
+        LOGGER.info("calling deleteDeveloper method from controller");
+        return developerService.deleteDeveloper(developerId);
+
     }
 
 
