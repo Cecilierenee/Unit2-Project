@@ -61,8 +61,8 @@ We want to build a working database with four models: Game, Genre, Developer, an
 |DELETE| /game/{gameid}| Delete single game|None|Public||
 |GET| /developer|Get all developers|None|Public||
 |GET| /developer/{developerid}|Get single developer|None|Public||
-|GET| /developer/{developerid}/games|Get all games created by a single developer|None|Public||
-|GET| /developer/{developerid}/games/{gameid}|Get single game single developer|None|Public||
+|GET| /developer/{developerid}/game|Get all games created by a single developer|None|Public||
+|GET| /developer/{developerid}/game/{gameid}|Get single game single developer|None|Public||
 |POST| /developer|Create single developer|None|Public||
 |PUT| /developer/{developerid}|Update single developer|None|Public||
 |DELETE| /developer/{developerid}|Delete single developer|None|Public||
