@@ -59,6 +59,17 @@ public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @Request
     return genreRepository.save(updateGenre);
 }
 
+public Optional<Genre> deleteGenre(@PathVariable Long genreId) {
+    LOGGER.info("Calling deleteGenre method from controller");
+    Optional<Genre> genre = genreRepository.findById(genreId);
+    if (genre.isPresent()) {
+        genreRepository.deleteById(genreId);
+        return genre;
+    } else {
+        throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
+    }
+}
+
 }
 
 
