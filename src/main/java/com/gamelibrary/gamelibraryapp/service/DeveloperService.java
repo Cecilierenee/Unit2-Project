@@ -35,6 +35,13 @@ public class DeveloperService {
 
     }
 
+    public List<Game> getDeveloperGames(Long developerId){
+        LOGGER.info("calling getDeveloperGames method from service");
+        Optional<Developer> developer = getDeveloper(developerId);
+        return developer.get().getGameList();
+    }
+
+
     public Optional<Developer> getDeveloper(Long developerId) {
         LOGGER.info("calling getDeveloper method from service");
         Optional<Developer> developer = developerRepository.findById(developerId);
@@ -44,6 +51,9 @@ public class DeveloperService {
             throw new InformationNotFoundException("game with id " + developerId + " is not found");
         }
     }
+
+
+
 
     public Developer createDeveloper(Developer developerObject) {
         LOGGER.info("calling createDeveloper method from service");
@@ -84,5 +94,7 @@ public class DeveloperService {
         }
 
     }
+
+
 
 }
