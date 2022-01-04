@@ -40,16 +40,12 @@ public class GameController {
     }
 
     @GetMapping(path = "/game/{gameId}")
-    public Optional getGame(@PathVariable Long gameId) {
+    public Optional<Game> getGame(@PathVariable Long gameId) {
         LOGGER.info("calling getGame method from controller");
-        Optional<Game> game = gameRepository.findById(gameId);
-        if (game.isPresent()) {
-            return game;
-        } else {
-            throw new InformationNotFoundException("game with id " + gameId + " is not found");
+       return gameService.getGame(gameId);
         }
 
-    }
+
 
     @PostMapping(path = "/game/")
     public Game createGame(@RequestBody Game gameObject) {
