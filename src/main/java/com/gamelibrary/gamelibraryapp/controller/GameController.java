@@ -63,15 +63,7 @@ public class GameController {
     @DeleteMapping(path = "/game/{gameId}")
     public Optional<Game> deleteGame(@PathVariable Long gameId) {
         LOGGER.info("calling deleteGame method from controller");
-        Optional<Game> game = gameRepository.findById(gameId);
-        if (game.isPresent()) {
-            gameRepository.deleteById(gameId);
-            return game;
-        } else {
-            throw new InformationNotFoundException("game with id " + gameId + " is not found");
-        }
+        return gameService.deleteGame(gameId);
 
     }
-
-
 }
