@@ -44,6 +44,7 @@ public Optional getGenre(@PathVariable Long genreId) {
         throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
     }
 }
+@GetMapping(path = "/genre/{genreId}/game")
 public List<Game> getGamesInGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGamesInGenre method from controller");
     Optional<Genre> genre = genreRepository.findById(genreId);
