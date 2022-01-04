@@ -1,6 +1,7 @@
 package com.gamelibrary.gamelibraryapp.service;
 
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
+import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,5 +30,13 @@ public class GenreService {
             throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
         }
 }
-    
+    public List<Game> getGamesInGenre() {
+        LOGGER.info("Calling getGamesInGenre method from controller");
+        Genre genre = genreRepository.findById(genreId).get();
+        if(genre != null) {
+            return genre.gameList;
+        } else {
+            throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
+        }
+    }
 }
