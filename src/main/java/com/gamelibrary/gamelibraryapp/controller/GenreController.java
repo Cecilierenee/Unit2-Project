@@ -26,7 +26,7 @@ public List<Genre> getGenres() {
     LOGGER.info("Calling getGenres method from controller");
     return genreRepository.findAll();
 }
-
+@GetMapping(path = "/genre/{genreId}")
 public Optional getGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGenre method from controller");
     Optional<Genre> genre = genreRepository.findById(genreId);
