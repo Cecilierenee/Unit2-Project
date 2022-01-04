@@ -1,5 +1,6 @@
 package com.gamelibrary.gamelibraryapp.controller;
 
+import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
@@ -48,7 +49,12 @@ public class GameController {
     @PostMapping(path = "/game/")
     public Game createGame(@RequestBody Game gameObject){
         LOGGER.info("calling createGame method from controller");
-
+        Game game = gameRepository.findByName(gameObject.getName());
+        if(game != null){
+            throw new InformationExistException("Game with name " + game.getName() + " already exists");
+        }else{
+            return gameRepository.save(gameObject);
+        }
     }
 
     @PutMapping(path = "/game/{gameId}")
