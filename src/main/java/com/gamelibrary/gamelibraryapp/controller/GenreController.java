@@ -1,6 +1,7 @@
 package com.gamelibrary.gamelibraryapp.controller;
 
 
+import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
@@ -35,6 +36,14 @@ public Optional getGenre(@PathVariable Long genreId) {
     } else {
         throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
     }
+}
+public Genre createGenre(@PathVariable Genre genreObject) {
+    LOGGER.info("Calling createGenre method from controller");
+    Genre genre = genreRepository.findByID(genreObject.getName());
+    if (genre != null) {
+        throw new InformationExistException("Genre with" + genre.getName() + "already exist");
+    } else {
+        return genreRepository.save(genreObject);
 }
 
 }
