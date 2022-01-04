@@ -18,6 +18,9 @@ public class Game {
         this.rating = rating;
     }
 
+    public Game() {
+    }
+
 
     public Long getId() {
         return id;

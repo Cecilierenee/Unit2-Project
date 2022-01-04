@@ -8,6 +8,11 @@ public class Developer {
     public Developer() {
     }
 
+    public Developer(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
