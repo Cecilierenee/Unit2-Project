@@ -1,5 +1,6 @@
 package com.gamelibrary.gamelibraryapp.service;
 
+import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
@@ -32,12 +33,22 @@ public class DeveloperService {
     }
 
     public Optional<Developer> getDeveloper(Long developerId) {
-        LOGGER.info("calling getGame method from service");
+        LOGGER.info("calling getDeveloper method from service");
         Optional<Developer> developer = developerRepository.findById(developerId);
         if (developer.isPresent()) {
             return developer;
         } else {
             throw new InformationNotFoundException("game with id " + developerId + " is not found");
+        }
+    }
+
+    public Developer createDeveloper(Developer developerObject) {
+        LOGGER.info("calling createDeveloper method from service");
+        Developer developer = developerRepository.findByName(developerObject.getName());
+        if (developer != null) {
+            throw new InformationExistException("Game with name " + developer.getName() + " already exists");
+        } else {
+            return developerRepository.save(developerObject);
         }
     }
 
