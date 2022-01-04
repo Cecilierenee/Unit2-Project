@@ -8,6 +8,7 @@
 Game Library/Wishlist API that a gamer can use to add, update, or delete games from their own individual library.
 
 ## User Stories
+![User stories banner](https://user-images.githubusercontent.com/89564513/148093074-98f7b9c1-9b10-4f5f-a4d9-e65a03a82b2b.png)
 
 **Game**<br>
   -As a gamer, I can create a game in my library.<br>
@@ -35,4 +36,6 @@ Game Library/Wishlist API that a gamer can use to add, update, or delete games f
   -As a gamer, I can read developers from a publisher in my library.<br>
   -As a gamer, I can delete a publisher from my library.<br>
 
+![MVP Banner](https://user-images.githubusercontent.com/89564513/148093144-0b0d1fb4-ac11-4f79-92fa-12e1da1d3cbe.png)<br>
 
+We want to build a working database with four models: Game, Genre, Developer, and Publisher. The Game model will be containing our four CRUD endpoints. The user will be notified when invalid requests are made.
