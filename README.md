@@ -63,7 +63,7 @@ We want to build a working database with four models: Game, Genre, Developer, an
 |GET| /developer/{developerid}|Get single developer|None|Public||
 |GET| /developer/{developerid}/games|Get all games created by a single developer|None|Public||
 |GET| /developer/{developerid}/games/{gameid}|Get single game single developer|None|Public||
-|POST| /publisher/{publisherid}developer|Create single developer|None|Public||
+|POST| /developer|Create single developer|None|Public||
 |PUT| /developer/{developerid}|Update single developer|None|Public||
 |DELETE| /developer/{developerid}|Delete single developer|None|Public||
 |GET| /publisher|Get all publishers|None|Public||
