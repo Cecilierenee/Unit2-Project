@@ -9,8 +9,15 @@ public class Game {
     private String releaseDate;
     private char rating;
 
-    public Game() {
+    public Game(Long id, String name, String description, int price, String releaseDate, char rating) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.releaseDate = releaseDate;
+        this.rating = rating;
     }
+
 
     public Long getId() {
         return id;
