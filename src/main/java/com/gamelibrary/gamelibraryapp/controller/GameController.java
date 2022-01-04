@@ -50,12 +50,7 @@ public class GameController {
     @PostMapping(path = "/game/")
     public Game createGame(@RequestBody Game gameObject) {
         LOGGER.info("calling createGame method from controller");
-        Game game = gameRepository.findByName(gameObject.getName());
-        if (game != null) {
-            throw new InformationExistException("Game with name " + game.getName() + " already exists");
-        } else {
-            return gameRepository.save(gameObject);
-        }
+        return gameService.createGame(gameObject);
     }
 
     @PutMapping(path = "/game/{gameId}")
