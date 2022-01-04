@@ -7,6 +7,7 @@ import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -52,5 +53,25 @@ public class GameService {
         }
     }
 
+    public Game updateGame(Long gameId, @RequestBody Game gameObject) {
+        LOGGER.info("calling updateGame method from service");
+        Optional<Game> game = gameRepository.findById(gameId);
+        if (game.isPresent()) {
+            if (gameObject.getName().equals(game.get().getName())) {
+                throw new InformationExistException("game " + game.get().getName() + " already exist");
+            } else {
+                Game updateGame = gameRepository.findById(gameId).get();
+                updateGame.setName(gameObject.getName());
+                updateGame.setDescription(gameObject.getDescription());
+                updateGame.setPrice(gameObject.getPrice());
+                updateGame.setRating(gameObject.getRating());
+                updateGame.setReleaseDate(gameObject.getReleaseDate());
+                return gameRepository.save(updateGame);
+            }
+        } else {
+            throw new InformationNotFoundException("game with id " + gameId + " not found");
+        }
+
+    }
 
 }
