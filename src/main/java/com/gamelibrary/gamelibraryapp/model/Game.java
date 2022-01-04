@@ -1,5 +1,7 @@
 package com.gamelibrary.gamelibraryapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -25,6 +27,15 @@ public class Game {
 
     @Column
     private char rating;
+
+@JsonIgnore
+@ManyToOne
+@JoinColumn(name = "developer_id")
+private Developer developer;
+
+
+
+
 
     public Game(Long id, String name, String description, int price, String releaseDate, char rating) {
         this.id = id;

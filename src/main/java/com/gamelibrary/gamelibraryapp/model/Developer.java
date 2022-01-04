@@ -1,9 +1,33 @@
 package com.gamelibrary.gamelibraryapp.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "developers")
 public class Developer {
 
+    @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String name;
+
+
+   @OneToMany
+   @LazyCollection(LazyCollectionOption.FALSE)
+   //One Developer can have more than one game
+    private List<Game> gameList;
+
+
 
     public Developer() {
     }
