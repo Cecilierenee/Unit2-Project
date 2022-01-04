@@ -38,6 +38,13 @@ public class DeveloperController {
         return developerService.getDeveloper(developerId);
     }
 
+    @GetMapping(path = "/developer/{developerId}/game")
+    public List<Game> getDeveloperGames(@PathVariable Long developerId) {
+        LOGGER.info("calling getDeveloperGames method from controller");
+        return developerService.getDeveloperGames(developerId);
+    }
+
+
     @PostMapping(path = "/developer/")
     public Developer createDeveloper(@RequestBody Developer developerObject) {
         LOGGER.info("calling createDeveloper method from controller");
