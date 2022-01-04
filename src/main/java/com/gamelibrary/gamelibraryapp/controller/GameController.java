@@ -19,52 +19,49 @@ public class GameController {
     private GameRepository gameRepository;
 
     @Autowired
-    public void setGameRepository(GameRepository gameRepository){
+    public void setGameRepository(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 
 
-
-
-
     @GetMapping(path = "/game/")
-    public List<Game> getGames(){
+    public List<Game> getGames() {
         LOGGER.info("calling getGames method from controller");
         return gameRepository.findAll();
 
     }
 
     @GetMapping(path = "/game/{gameId}")
-    public Optional getGame(@PathVariable Long gameId){
+    public Optional getGame(@PathVariable Long gameId) {
         LOGGER.info("calling getGame method from controller");
         Optional<Game> game = gameRepository.findById(gameId);
-        if(game.isPresent()){
+        if (game.isPresent()) {
             return game;
-        }else{
+        } else {
             throw new InformationNotFoundException("game with id " + gameId + " is not found");
         }
 
     }
 
     @PostMapping(path = "/game/")
-    public Game createGame(@RequestBody Game gameObject){
+    public Game createGame(@RequestBody Game gameObject) {
         LOGGER.info("calling createGame method from controller");
         Game game = gameRepository.findByName(gameObject.getName());
-        if(game != null){
+        if (game != null) {
             throw new InformationExistException("Game with name " + game.getName() + " already exists");
-        }else{
+        } else {
             return gameRepository.save(gameObject);
         }
     }
 
     @PutMapping(path = "/game/{gameId}")
-    public Game updateGame(@PathVariable(value = "gameId") Long gameId, @RequestBody Game gameObject){
+    public Game updateGame(@PathVariable(value = "gameId") Long gameId, @RequestBody Game gameObject) {
         LOGGER.info("calling updateGame method from controller");
         Optional<Game> game = gameRepository.findById(gameId);
-        if(game.isPresent()){
-            if(gameObject.getName().equals(game.get().getName())){
+        if (game.isPresent()) {
+            if (gameObject.getName().equals(game.get().getName())) {
                 throw new InformationExistException("game " + game.get().getName() + " already exist");
-            }else{
+            } else {
                 Game updateGame = gameRepository.findById(gameId).get();
                 updateGame.setName(gameObject.getName());
                 updateGame.setDescription(gameObject.getDescription());
@@ -73,19 +70,24 @@ public class GameController {
                 updateGame.setReleaseDate(gameObject.getReleaseDate());
                 return gameRepository.save(updateGame);
             }
-        }else{
+        } else {
             throw new InformationNotFoundException("game with id " + gameId + " not found");
         }
 
     }
 
     @DeleteMapping(path = "/game/{gameId}")
-    public Optional<Game> deleteGame(@PathVariable Long gameId){
+    public Optional<Game> deleteGame(@PathVariable Long gameId) {
         LOGGER.info("calling deleteGame method from controller");
+        Optional<Game> game = gameRepository.findById(gameId);
+        if (game.isPresent()) {
+            gameRepository.deleteById(gameId);
+            return game;
+        } else {
+            throw new InformationNotFoundException("game with id " + gameId + " is not found");
+        }
 
     }
 
-
-
-
+    
 }
