@@ -45,4 +45,9 @@ public class PublisherController {
         LOGGER.info("Calling updatePublisher method from controller");
         return publisherService.updatePublisher(publisherId, publisherObject);
     }
+
+    public void deletePublisher(@PathVariable Long publisherId){
+        LOGGER.info("Calling deletePublisher method from controller");
+        publisherService.deletePublisher(publisherId);
+    }
 }
