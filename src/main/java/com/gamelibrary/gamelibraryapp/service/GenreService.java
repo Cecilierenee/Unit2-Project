@@ -5,12 +5,14 @@ import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
+import org.springframework.stereotype.Service;
 
 
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+@Service
 public class GenreService {
 
     public static final Logger LOGGER = Logger.getLogger(GenreService.class.getName());
