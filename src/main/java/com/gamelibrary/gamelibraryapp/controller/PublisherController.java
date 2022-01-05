@@ -46,6 +46,7 @@ public class PublisherController {
         return publisherService.updatePublisher(publisherId, publisherObject);
     }
 
+    @DeleteMapping(path = "/publisher/{publisherId}")
     public void deletePublisher(@PathVariable Long publisherId){
         LOGGER.info("Calling deletePublisher method from controller");
         publisherService.deletePublisher(publisherId);
