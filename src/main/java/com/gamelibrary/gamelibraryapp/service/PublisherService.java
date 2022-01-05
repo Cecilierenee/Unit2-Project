@@ -1,5 +1,6 @@
 package com.gamelibrary.gamelibraryapp.service;
 
+import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
 
@@ -28,6 +29,8 @@ public class PublisherService {
         Optional<Publisher> publisher = publisherRepository.findById(publisherId);
         if (publisher != null) {
             return publisher.get();
+        } else {
+            throw new InformationNotFoundException("Publisher with id " + publisherId + "Does not exist" );
         }
     }
 }
