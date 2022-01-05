@@ -34,6 +34,7 @@ public class PublisherController {
         return publisherService.getPublisher(publisherId);
     }
 
+    @PostMapping(path = "/publisher")
     public Publisher createPublisher(@RequestBody Publisher publisherObject){
         LOGGER.info("Calling createPublisher method from controller");
         return publisherService.createPublisher(publisherObject);
