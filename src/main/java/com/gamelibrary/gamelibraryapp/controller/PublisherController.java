@@ -39,4 +39,9 @@ public class PublisherController {
         LOGGER.info("Calling createPublisher method from controller");
         return publisherService.createPublisher(publisherObject);
     }
+
+    public Publisher updatePublisher(@PathVariable Long publisherId, @RequestBody Publisher publisherObject){
+        LOGGER.info("Calling updatePublisher method from controller");
+        return publisherService.updatePublisher(publisherId, publisherObject);
+    }
 }
