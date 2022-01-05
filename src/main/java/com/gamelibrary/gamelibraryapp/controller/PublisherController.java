@@ -40,6 +40,7 @@ public class PublisherController {
         return publisherService.createPublisher(publisherObject);
     }
 
+    @PutMapping(path = "/publisher/{publisherId}")
     public Publisher updatePublisher(@PathVariable Long publisherId, @RequestBody Publisher publisherObject){
         LOGGER.info("Calling updatePublisher method from controller");
         return publisherService.updatePublisher(publisherId, publisherObject);
