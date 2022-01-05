@@ -31,6 +31,7 @@ public class PublisherController {
         return publisherService.getPublishers();
     }
 
+    @GetMapping(path = "/publisher/{publisherId}")
     public Publisher getPublisher(@PathVariable Long publisherId){
         LOGGER.info("Calling getPublisher method from controller");
         return publisherService.getPublisher(publisherId);
