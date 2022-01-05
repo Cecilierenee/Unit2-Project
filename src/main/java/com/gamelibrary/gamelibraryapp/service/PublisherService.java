@@ -45,6 +45,7 @@ public class PublisherService {
             return publisherRepository.save(publisherObject);
         }
     }
+    //Update publisher in the publisher model
     public Publisher updatePublisher(Long publisherId, Publisher publisherObject) {
         LOGGER.info("Calling updatePublisher method from service");
         Publisher publisher = publisherRepository.findById(publisherId);
@@ -57,6 +58,17 @@ public class PublisherService {
             }
         } else {
             throw new InformationNotFoundException("Can not update " + publisherId + "It does not exist");
+        }
+    }
+    //Delete a publisher from the publisher model.
+    public void deletePublisher(Long publisherId) {
+        LOGGER.info("Calling deletePublisher method from controller");
+        if (publisherRepository.findById(publisherId).isPresent()) {
+            publisherRepository.deleteById(publisherId);
+
+        } else {
+            throw new InformationNotFoundException("Genre with " + publisherId + " does not exist");
+
         }
     }
 }

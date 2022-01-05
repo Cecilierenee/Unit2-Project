@@ -65,12 +65,10 @@ public class GenreService {
             throw new InformationNotFoundException("Can not update " + genreId + "It does not exist");
         }
     }
-    public Optional<Genre> deleteGenre(Long genreId) {
+    public void deleteGenre(Long genreId) {
         LOGGER.info("Calling deleteGenre method from controller");
-        Optional<Genre> genre = genreRepository.findById(genreId);
-        if (genre.isPresent()) {
+        if (genreRepository.findById(genreId).isPresent()) {
             genreRepository.deleteById(genreId);
-            return genre;
         } else {
             throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
         }
