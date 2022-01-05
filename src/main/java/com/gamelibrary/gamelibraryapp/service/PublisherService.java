@@ -1,6 +1,8 @@
 package com.gamelibrary.gamelibraryapp.service;
 
+import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
+import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
 
@@ -33,6 +35,17 @@ public class PublisherService {
             throw new InformationNotFoundException("Publisher with id " + publisherId + "Does not exist" );
         }
     }
+
+    public Publisher createPublisher(Publisher publisherObject) {
+        LOGGER.info("Calling createPublisher method from service");
+        Publisher publisher = PublisherRepository.findByName(publisherObject.getName());
+        if (publisher != null) {
+            throw new InformationExistException("Genre with" + publisher.getName() + "already exist");
+        } else {
+            return publisherRepository.save(publisherObject);
+        }
+    }
+
 }
 
 
