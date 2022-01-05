@@ -56,11 +56,12 @@ public class GenreService {
             if (genreObject.getName().equals(genre.get().getName())) {
                 throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
             } else {
-                updateGenre = genreRepository.findById(genreId).get();
-                updateGenre.setName(genreObject.getName());
+                genre.setName(genreObject.getName());
+                return genreRepository.save(genreObject);
             }
+        } else {
+            throw new InformationNotFoundException("Can not update " + genreId + "It does not exist");
         }
-        return genreRepository.save(updateGenre);
     }
     public Optional<Genre> deleteGenre(Long genreId) {
         LOGGER.info("Calling deleteGenre method from controller");
