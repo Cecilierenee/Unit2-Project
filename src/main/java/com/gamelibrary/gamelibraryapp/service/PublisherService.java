@@ -4,6 +4,7 @@ import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class PublisherService {
@@ -14,8 +15,21 @@ public class PublisherService {
     public void setPublisherRepository(PublisherRepository publisherRepository){
         this.publisherRepository = publisherRepository;
     }
-
+    //Get all publishers in the publisher model
     public List<Publisher> getPublishers(){
+    LOGGER.info("Calling getPublishers method from service");
+    List<Publisher> publishers = publisherRepository.findAll();
+    return publishers;
+    }
 
+    //Get specific publisher in the model
+    public Publisher getPublisher(Long publisherId) {
+        LOGGER.info("Calling getPublisher method from service");
+        Optional<Publisher> publisher = publisherRepository.findById(publisherId);
+        if (publisher != null) {
+            return publisher.get();
+        }
     }
 }
+
+
