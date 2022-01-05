@@ -30,13 +30,13 @@ public class GenreController {
 @GetMapping(path = "/genre")
 public List<Genre> getGenres() {
     LOGGER.info("Calling getGenres method from controller");
-    return genreService.findAll();
+    return genreService.getGenres();
 }
 //Calls the service class to get all genres in the model
 @GetMapping(path = "/genre/{genreId}")
 public Optional getGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGenre method from controller");
-    Optional<Genre> genre = genreService.findById(genreId);
+    Optional<Genre> genre = genreService.getGenre(genreId);
     if (genre.isPresent()) {
         return genre;
     } else {
@@ -47,9 +47,9 @@ public Optional getGenre(@PathVariable Long genreId) {
 @GetMapping(path = "/genre/{genreId}/game")
 public List<Game> getGamesInGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGamesInGenre method from controller");
-    Optional<Genre> genre = genreService.findById(genreId);
-    if (genre.isPresent()){
-        return genreService.getSongsinGenre(genreId);
+    List<Game> genre = genreService.getGamesInGenre(genreId);
+    if (genre != null){
+        return genreService.getGamesInGenre(genreId);
     } else {
         throw new InformationNotFoundException("Genre with " + genreId + " does not contain any games");
     }
@@ -58,23 +58,23 @@ public List<Game> getGamesInGenre(@PathVariable Long genreId) {
 @PostMapping(path = "/genre")
 public Genre createGenre(@PathVariable Genre genreObject) {
     LOGGER.info("Calling createGenre method from controller");
-    Genre genre = genreService.findByName(genreObject.getName());
+    Genre genre = genreService.createGenre(genreObject);
     if (genre != null) {
         throw new InformationExistException("Genre with" + genre.getName() + "already exist");
     } else {
-        return genreService.save(genreObject);
+        return genreService.createGenre(genreObject);
 }}
 //Calls the service class to allow the game to create a new genre.
 @PutMapping(path = "/genre/{genreId}")
 public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @RequestBody Genre genreObject) {
     LOGGER.info("Calling updateGenre method from controller");
-    Optional<Genre> genre = genreService.findById(genreId);
+    Optional<Genre> genre = genreService.updateGenre(genreId);
     Genre updateGenre = null;
     if (genre.isPresent()) {
         if (genreObject.getName().equals(genre.get().getName())) {
             throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
         } else {
-            updateGenre = genreService.findById(genreId).get();
+            updateGenre = genreService.updateGenre().get();
             updateGenre.setName(genreObject.getName());
         }
     }
@@ -84,9 +84,9 @@ public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @Request
 @DeleteMapping(path = "/genre/{genreId}")
 public Optional<Genre> deleteGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling deleteGenre method from controller");
-    Optional<Genre> genre = genreService.findById(genreId);
+    Optional<Genre> genre = genreService.deleteGenre(genreId);
     if (genre.isPresent()) {
-        genreService.deleteById(genreId);
+        genreService.deleteGenre(genreId);
         return genre;
     } else {
         throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
