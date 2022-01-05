@@ -6,6 +6,7 @@ import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
 import com.gamelibrary.gamelibraryapp.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,12 @@ public class PublisherController {
 
     @GetMapping(path = "/publisher")
     public List<Publisher> getPublishers(){
-        LOGGER.info("Calling getPublisher method from controller");
+        LOGGER.info("Calling getPublishers method from controller");
         return publisherService.getPublishers();
+    }
+
+    public Publisher getPublisher(@PathVariable Long publisherId){
+        LOGGER.info("Calling getPublisher method from controller");
+        return publisherService.getPublisher(publisherId);
     }
 }
