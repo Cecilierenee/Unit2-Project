@@ -35,7 +35,7 @@ public class PublisherService {
             throw new InformationNotFoundException("Publisher with id " + publisherId + "Does not exist" );
         }
     }
-
+    //Create a publisher in the model
     public Publisher createPublisher(Publisher publisherObject) {
         LOGGER.info("Calling createPublisher method from service");
         Publisher publisher = PublisherRepository.findByName(publisherObject.getName());
@@ -45,7 +45,20 @@ public class PublisherService {
             return publisherRepository.save(publisherObject);
         }
     }
-
+    public Publisher updatePublisher(Long publisherId, Publisher publisherObject) {
+        LOGGER.info("Calling updatePublisher method from service");
+        Publisher publisher = publisherRepository.findById(publisherId);
+        if(publisher != null) {
+            if (publisher.getName().equals(publisher.get().getName())) {
+                throw new InformationExistException("Genre " + publisher.get().getName() + " already exist");
+            } else {
+                publisher.setName(publisher.getName());
+                return publisherRepository.save(publisherObject);
+            }
+        } else {
+            throw new InformationNotFoundException("Can not update " + publisherId + "It does not exist");
+        }
+    }
 }
 
 
