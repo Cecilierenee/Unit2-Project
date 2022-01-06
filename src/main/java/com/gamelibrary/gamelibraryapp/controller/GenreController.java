@@ -74,11 +74,11 @@ public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @Request
         if (genreObject.getName().equals(genre.get().getName())) {
             throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
         } else {
-            updateGenre = genreService.updateGenre().get(genreObject);
+            updateGenre = genreService.updateGenre(genreId, genreObject);
             updateGenre.setName(genreObject.getName());
         }
     }
-    return genreService.save(updateGenre);
+    return genreService.updateGenre(genreId, genreObject);
 }
 //Calls the service class to allow a gamer to update a genre by the genre id.
 @DeleteMapping(path = "/genre/{genreId}")
