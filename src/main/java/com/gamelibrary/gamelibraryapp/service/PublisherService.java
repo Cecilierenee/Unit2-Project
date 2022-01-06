@@ -38,7 +38,7 @@ public class PublisherService {
     //Create a publisher in the model
     public Publisher createPublisher(Publisher publisherObject) {
         LOGGER.info("Calling createPublisher method from service");
-        Publisher publisher = PublisherRepository.findByName(publisherObject.getName());
+        Publisher publisher = createPublisher(publisherObject);
         if (publisher != null) {
             throw new InformationExistException("Genre with" + publisher.getName() + "already exist");
         } else {
@@ -48,10 +48,10 @@ public class PublisherService {
     //Update publisher in the publisher model
     public Publisher updatePublisher(Long publisherId, Publisher publisherObject) {
         LOGGER.info("Calling updatePublisher method from service");
-        Publisher publisher = publisherRepository.findById(publisherId);
+        Publisher publisher = updatePublisher(publisherId, publisherObject);
         if(publisher != null) {
-            if (publisher.getName().equals(publisher.get().getName())) {
-                throw new InformationExistException("Genre " + publisher.get().getName() + " already exist");
+            if (publisher.getName().equals(publisher.getName())) {
+                throw new InformationExistException("Genre " + publisher.getName() + " already exist");
             } else {
                 publisher.setName(publisher.getName());
                 return publisherRepository.save(publisherObject);

@@ -46,11 +46,11 @@ public class GenreService {
             throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
         }
 }
-    public List<Game> getGamesInGenre(Long genreId) {
+    public Optional<Game> getGamesInGenre(Long genreId) {
         LOGGER.info("Calling getGamesInGenre method from service");
         Genre genre = genreRepository.findById(genreId).get();
         if(genre != null) {
-            return genre.getGamesInGenre();
+            return gameRepository.findById(genreId);
         } else {
             throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
         }

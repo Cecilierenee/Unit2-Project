@@ -45,9 +45,9 @@ public Optional getGenre(@PathVariable Long genreId) {
 }
 //calls the service class to get a single genre in the model using genre id.
 @GetMapping(path = "/genre/{genreId}/game")
-public List<Game> getGamesInGenre(@PathVariable Long genreId) {
+public Optional<Game> getGamesInGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGamesInGenre method from controller");
-    List<Game> genre = genreService.getGamesInGenre(genreId);
+    Optional<Game> genre = getGamesInGenre(genreId);
     if (genre != null){
         return genreService.getGamesInGenre(genreId);
     } else {
