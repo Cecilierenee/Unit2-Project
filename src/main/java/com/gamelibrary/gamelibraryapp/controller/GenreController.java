@@ -68,7 +68,7 @@ public Genre createGenre(@PathVariable Genre genreObject) {
 @PutMapping(path = "/genre/{genreId}")
 public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @RequestBody Genre genreObject) {
     LOGGER.info("Calling updateGenre method from controller");
-    Optional<Genre> genre = genreService.updateGenre(genreId);
+    Optional<Genre> genre = genreService.updateGenre(genreId, genreObject);
     Genre updateGenre = null;
     if (genre.isPresent()) {
         if (genreObject.getName().equals(genre.get().getName())) {

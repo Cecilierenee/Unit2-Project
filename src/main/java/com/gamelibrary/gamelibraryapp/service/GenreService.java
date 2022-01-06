@@ -4,7 +4,9 @@ import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
+import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -17,7 +19,17 @@ public class GenreService {
 
     public static final Logger LOGGER = Logger.getLogger(GenreService.class.getName());
     private GenreRepository genreRepository;
-    private GenreRepository gameRepository;
+    private GameRepository gameRepository;
+
+    @Autowired
+    public void setGenreRepository(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
+    }
+
+    @Autowired
+    public void setGameRepository(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
 
     public List<Genre> getGenres() {
         LOGGER.info("Calling getGenre method from service");
@@ -38,7 +50,7 @@ public class GenreService {
         LOGGER.info("Calling getGamesInGenre method from service");
         Genre genre = genreRepository.findById(genreId).get();
         if(genre != null) {
-            return genre.gameList;
+            return genre.getGamesInGenre();
         } else {
             throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
         }
