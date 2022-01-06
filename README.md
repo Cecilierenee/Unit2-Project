@@ -93,7 +93,7 @@ We want to build a working database with four models: Game, Genre, Developer, an
   -We also communicated clearly on how we wanted to use git to mangage the project, to ensure we didn't have any hiccups.<br>
 3. We split the work, and created each model needed and their respective service and controller classes.<br>
   -While doing so, we included exception handeling as well.<br>
-  -After completing, we reached MVP.<br>
+  
   
   
   
