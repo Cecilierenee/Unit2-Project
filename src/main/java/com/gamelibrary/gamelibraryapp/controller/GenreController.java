@@ -68,13 +68,13 @@ public Genre createGenre(@PathVariable Genre genreObject) {
 @PutMapping(path = "/genre/{genreId}")
 public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @RequestBody Genre genreObject) {
     LOGGER.info("Calling updateGenre method from controller");
-    Optional<Genre> genre = genreService.updateGenre(genreId, genreObject);
+    Optional<Genre> genre = Optional.ofNullable(genreService.updateGenre(genreId, genreObject));
     Genre updateGenre = null;
     if (genre.isPresent()) {
         if (genreObject.getName().equals(genre.get().getName())) {
             throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
         } else {
-            updateGenre = genreService.updateGenre().get();
+            updateGenre = genreService.updateGenre().get(genreObject);
             updateGenre.setName(genreObject.getName());
         }
     }
