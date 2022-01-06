@@ -86,12 +86,19 @@ We want to build a working database with four models: Game, Genre, Developer, an
 ![The Process](https://user-images.githubusercontent.com/89564513/148101651-29730772-c08e-40aa-b7ac-b798a3ff510b.png)
 
 1. First, We decided on an app, that would effeciently display our knowledge of Restful API's and CRUD opperations.
-  -We decided on a Game library, for this app, we decided on four models for our app; *Game*, *Developer*, *Publisher*, and *Genre*.
-  -From there we developed our ERD, and listed out our endpoints. 
-2. We developed our User Stories and came up with a schedule to ensure that all requirements were met, and that we managed our time wisely.
-  -To make things simple, we set up our Repository and built the skeloton of our app.
-  -We also communicated clearly on how we wanted to use git to mangage the project, to ensure we didn't have any hiccups.
-3. We split the work, and created each model needed and their respective service and controller classes.
-  -While doing so, we included exception handeling as well.
-  -After completing, we reached MVP.
+  -We decided on a Game library, for this app, we decided on four models for our app; *Game*, *Developer*, *Publisher*, and *Genre*.<br>
+  -From there we developed our ERD, and listed out our endpoints. <br>
+2. We developed our User Stories and came up with a schedule to ensure that all requirements were met, and that we managed our time wisely.<br>
+  -To make things simple, we set up our Repository and built the skeloton of our app.<br>
+  -We also communicated clearly on how we wanted to use git to mangage the project, to ensure we didn't have any hiccups.<br>
+3. We split the work, and created each model needed and their respective service and controller classes.<br>
+  -While doing so, we included exception handeling as well.<br>
+  -After completing, we reached MVP.<br>
+  
+  
+  
+  
+  
+  
+  ## Resources
 
