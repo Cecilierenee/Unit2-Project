@@ -28,6 +28,7 @@ public class GameController {
     }
 
 
+    //Get all games
     @GetMapping(path = "/game/")
     public List<Game> getGames() {
         LOGGER.info("calling getGames method from controller");
@@ -35,6 +36,7 @@ public class GameController {
 
     }
 
+    //Get a single game
     @GetMapping(path = "/game/{gameId}")
     public Optional<Game> getGame(@PathVariable Long gameId) {
         LOGGER.info("calling getGame method from controller");
@@ -42,13 +44,14 @@ public class GameController {
         }
 
 
-
+    //Create a game
     @PostMapping(path = "/game/")
     public Game createGame(@RequestBody Game gameObject) {
         LOGGER.info("calling createGame method from controller");
         return gameService.createGame(gameObject);
     }
 
+    //Update a single game
     @PutMapping(path = "/game/{gameId}")
     public Game updateGame(@PathVariable(value = "gameId") Long gameId, @RequestBody Game gameObject) {
         LOGGER.info("calling updateGame method from controller");
@@ -56,6 +59,7 @@ public class GameController {
 
     }
 
+    //Delete a single game
     @DeleteMapping(path = "/game/{gameId}")
     public Optional<Game> deleteGame(@PathVariable Long gameId) {
         LOGGER.info("calling deleteGame method from controller");
