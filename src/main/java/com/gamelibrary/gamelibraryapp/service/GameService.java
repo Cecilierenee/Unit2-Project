@@ -5,8 +5,10 @@ import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
+import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
+import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ public class GameService {
     private static final Logger LOGGER = Logger.getLogger(GameService.class.getName());
     private GameRepository gameRepository;
     private DeveloperRepository developerRepository;
+    private GenreRepository genreRepository;
 
     @Autowired
     public void setGameRepository(GameRepository gameRepository){
@@ -87,6 +90,75 @@ public class GameService {
         }
 
     }
+
+    public List<Genre> getGenres() {
+        LOGGER.info("Calling getGenre method from service");
+        return genreRepository.findAll();
+    }
+
+    public Optional getGenre(Long genreId) {
+        LOGGER.info("Calling getGenre method from service");
+        Optional<Genre> genre = genreRepository.findById(genreId);
+        if (genre.isPresent()) {
+            return genre;
+        } else {
+            throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
+        }
+    }
+    public Optional<Game> getGamesInGenre(Long genreId) {
+        LOGGER.info("Calling getGamesInGenre method from service");
+        Genre genre = genreRepository.findById(genreId).get();
+        if(genre != null) {
+            return gameRepository.findById(genreId);
+        } else {
+            throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
+        }
+    }
+    public Genre createGenre(Genre genreObject) {
+        LOGGER.info("Calling createGenre method from service");
+        Genre genre = genreRepository.findByName(genreObject.getName());
+        if (genre != null) {
+            throw new InformationExistException("Genre with" + genre.getName() + "already exist");
+        } else {
+            return genreRepository.save(genreObject);
+        }}
+    public Genre updateGenre(Long genreId, Genre genreObject) {
+        LOGGER.info("Calling updateGenre method from service");
+        Optional<Genre> genre = genreRepository.findById(genreId);
+        if(genre.isPresent()) {
+            if (genreObject.getName().equals(genre.get().getName())) {
+                throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
+            } else {
+                genre.get().setName("genreObject");
+                return genreRepository.save(genreObject);
+            }
+        } else {
+            throw new InformationNotFoundException("Can not update " + genreId + "It does not exist");
+        }
+    }
+    public Optional<Genre> deleteGenre(Long genreId) {
+        LOGGER.info("Calling deleteGenre method from controller");
+        if (genreRepository.findById(genreId).isPresent()) {
+            genreRepository.deleteById(genreId);
+        } else {
+            throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public List<Developer> getDevelopers() {
         LOGGER.info("calling getDevelopers method from service");
