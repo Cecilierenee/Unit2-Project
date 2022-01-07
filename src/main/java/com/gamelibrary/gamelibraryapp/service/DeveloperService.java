@@ -41,6 +41,17 @@ public class DeveloperService {
         return developer.get().getGameList();
     }
 
+    public Game getDeveloperGame(Long developerId, Long gameId){
+        LOGGER.info("calling getDeveloperGame method from service");
+        Optional<Game> game = getDeveloperGames(developerId).stream().filter(x -> x.getId().equals(gameId)).findFirst();
+        if (game.isPresent()){
+            return game.get();
+        }else{
+            throw new InformationNotFoundException("The game with id " + gameId + " does not exist");
+        }
+
+    }
+
 
     public Optional<Developer> getDeveloper(Long developerId) {
         LOGGER.info("calling getDeveloper method from service");
