@@ -31,6 +31,24 @@ public class Developer {
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
+    /********** add user **********/
+    // many categories belong to a one user
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+    /********** end of user **********/;
+
+    /********** user getters and setters **********/
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    /********** user getters and setters **********/
+
     public Publisher getPublisher() {
         return publisher;
     }

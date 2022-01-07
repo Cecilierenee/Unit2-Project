@@ -1,5 +1,6 @@
 package com.gamelibrary.gamelibraryapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -23,6 +24,24 @@ public class Genre {
     @OneToMany(mappedBy = "genre", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Game> gameList;
+
+    /********** add user **********/
+    // many categories belong to a one user
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+    /********** end of user **********/
+
+    /********** user getters and setters **********/
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    /********** user getters and setters **********/
     //One Genre can have more than one game.
 
     public Genre() {

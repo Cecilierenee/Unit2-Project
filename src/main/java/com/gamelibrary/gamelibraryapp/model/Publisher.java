@@ -1,5 +1,6 @@
 package com.gamelibrary.gamelibraryapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -21,6 +22,15 @@ public class Publisher {
     @OneToMany(mappedBy = "publisher", orphanRemoval = true) // One publisher can have many developers
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Developer> developerList;
+
+    /********** add user **********/
+    // many categories belong to a one user
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+    /********** end of user **********/
+
 
 
     public Publisher() {
@@ -46,5 +56,15 @@ public class Publisher {
     public void setName(String name) {
         this.name = name;
     }
+
+    /********** user getters and setters **********/
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    /********** user getters and setters **********/
 
 }

@@ -38,7 +38,23 @@ private Developer developer;
 @JoinColumn(name = "genre_id")
 private Genre genre;
 
+    /********** add user **********/
+    // many categories belong to a one user
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+    /********** end of user **********/
 
+    /********** user getters and setters **********/
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    /********** user getters and setters **********/
 
 
     public Game(Long id, String name, String description, int price, String releaseDate, char rating) {
