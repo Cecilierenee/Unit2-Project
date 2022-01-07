@@ -56,7 +56,6 @@ public class DeveloperService {
 
     public Game getDeveloperGame(Long developerId, Long gameId){
         LOGGER.info("calling getDeveloperGame method from service");
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Game> game = getDeveloperGames(developerId).stream().filter(x -> x.getId().equals(gameId)).findFirst();
         if (game.isPresent()){
             return game.get();
