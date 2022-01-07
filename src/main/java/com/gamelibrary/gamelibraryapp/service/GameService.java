@@ -78,27 +78,23 @@ public class GameService {
         }
     }
 
-    public Game updateGame(Long gameId, @RequestBody Game gameObject) {
+    public Game updateGame(Long gameId,Game gameObject) {
         LOGGER.info("calling updateGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Game> game = gameRepository.findById(gameId);
-        if (game.isPresent()) {
-            if (gameObject.getName().equals(game.get().getName())) {
-                throw new InformationExistException("game " + game.get().getName() + " already exist");
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+                throw new InformationExistException("game with id " + gameId + " already exist");
             } else {
-                Game updateGame = gameRepository.findById(gameId).get();
-                updateGame.setName(gameObject.getName());
-                updateGame.setDescription(gameObject.getDescription());
-                updateGame.setPrice(gameObject.getPrice());
-                updateGame.setRating(gameObject.getRating());
-                updateGame.setReleaseDate(gameObject.getReleaseDate());
-                return gameRepository.save(updateGame);
-            }
-        } else {
-            throw new InformationNotFoundException("game with id " + gameId + " not found");
-        }
 
+                game.setName(gameObject.getName());
+                game.setDescription(gameObject.getDescription());
+                game.setPrice(gameObject.getPrice());
+                game.setRating(gameObject.getRating());
+                game.setReleaseDate(gameObject.getReleaseDate());
+                return gameRepository.save(game);
+            }
     }
+    
     public Optional<Game> deleteGame(Long gameId) {
         LOGGER.info("calling deleteGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
