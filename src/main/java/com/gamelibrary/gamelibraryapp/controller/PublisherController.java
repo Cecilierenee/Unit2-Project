@@ -5,8 +5,11 @@ import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
 import com.gamelibrary.gamelibraryapp.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -33,7 +36,7 @@ public class PublisherController {
 
     //Get a single publisher
     @GetMapping(path = "/publisher/{publisherId}")
-    public Optional<Publisher> getPublisher(@PathVariable Long publisherId){
+    public Publisher getPublisher(@PathVariable Long publisherId){
         LOGGER.info("Calling getPublisher method from controller");
         return publisherService.getPublisher(publisherId);
     }
@@ -54,8 +57,11 @@ public class PublisherController {
 
     //Delete a single publisher
     @DeleteMapping(path = "/publisher/{publisherId}")
-    public Optional<Publisher> deletePublisher(@PathVariable Long publisherId){
+    public ResponseEntity<HashMap> deletePublisher(@PathVariable Long publisherId){
         LOGGER.info("Calling deletePublisher method from controller");
-        return publisherService.deletePublisher(publisherId);
+        publisherService.deletePublisher(publisherId);
+        HashMap responseMessage = new HashMap();
+        responseMessage.put("status", "publisher: " +publisherId + " was deleted");
+        return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
     }
 }

@@ -20,72 +20,53 @@ public class PublisherService {
     public static final Logger LOGGER = Logger.getLogger(PublisherService.class.getName());
 
     @Autowired
-    public void setPublisherRepository(PublisherRepository publisherRepository){
+    public void setPublisherRepository(PublisherRepository publisherRepository) {
         this.publisherRepository = publisherRepository;
     }
+
     //Get all publishers in the publisher model
-    public List<Publisher> getPublishers(){
-    LOGGER.info("Calling getPublishers method from service");
-    MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    List<Publisher> publishers = publisherRepository.findByUserId(userDetails.getUser().getId());
-    if(publishers.isEmpty()){
-        throw new InformationNotFoundException("No publishers found for that user " + userDetails.getUser().getId())
-    } else {
-        return publishers;
-    }
+    public List<Publisher> getPublishers() {
+        LOGGER.info("Calling getPublishers method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return publisherRepository.findByUserId(userDetails.getUser().getId());
     }
 
     //Get specific publisher in the model
     public Publisher getPublisher(Long publisherId) {
         LOGGER.info("Calling getPublisher method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Publisher publisher = publisherRepository.findByIdAndUserId(publisherId, userDetails.getUser().getId())
-        if (publisher == null) {
-            throw new InformationNotFoundException("Publisher with id " + publisherId + "Does not exist" );
+        Optional<Publisher> publisher = publisherRepository.findByIdAndUserId(publisherId, userDetails.getUser().getId());
+        if (publisher.isPresent()) {
+            return publisher.get();
         } else {
-            return publisher;
+            throw new InformationNotFoundException("Publisher with id " + publisherId + "Does not exist");
         }
     }
+
     //Create a publisher in the model
     public Publisher createPublisher(Publisher publisherObject) {
         LOGGER.info("Calling createPublisher method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Publisher publisher = publisherRepository.findByName(publisherObject.getName());
-        if (publisher != null) {
-            throw new InformationExistException("Genre with" + publisher.getName() + "already exist");
-        } else {
-            return publisherRepository.save(publisherObject);
-        }
+        publisherObject.setUser(userDetails.getUser());
+        return publisherRepository.save(publisherObject);
     }
+
     //Update publisher in the publisher model
     public Publisher updatePublisher(Long publisherId, Publisher publisherObject) {
         LOGGER.info("Calling updatePublisher method from service");
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional <Publisher> publisher = publisherRepository.findById(publisherId);
-        if(publisher.isPresent()) {
-            if (publisherObject.getName().equals(publisher.get().getName())) {
-                throw new InformationExistException("Genre " + publisher.get().getName() + " already exist");
-            } else {
-                Publisher updatePublisher = publisherRepository.findById(publisherId).get();
-                updatePublisher.setName(publisherObject.getName());
-
-                return publisherRepository.save(publisherObject);
-            }
-        } else {
-            throw new InformationNotFoundException("Can not update " + publisherId + "It does not exist");
-        }
+        Publisher publisher = getPublisher(publisherId);
+        publisher.setName(publisherObject.getName());
+        return publisherRepository.save(publisher);
     }
-    //Delete a publisher from the publisher model.
-    public Optional<Publisher> deletePublisher(Long publisherId) {
-        LOGGER.info("Calling deletePublisher method from controller");
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Publisher> publisher = publisherRepository.findById(publisherId);
-        if (publisher.isPresent()) {
-            publisherRepository.deleteById(publisherId);
-            return publisher;
-        } else {
-            throw new InformationNotFoundException("Genre with " + publisherId + " does not exist");
 
+    //Delete a publisher from the publisher model.
+    public void deletePublisher(Long publisherId) {
+        LOGGER.info("Calling deletePublisher method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (publisherRepository.findByIdAndUserId(publisherId, userDetails.getUser().getId()).isPresent()) {
+            publisherRepository.deleteById(publisherId);
+        } else {
+            throw new InformationNotFoundException("Publisher with " + publisherId + " does not exist");
         }
     }
 }
