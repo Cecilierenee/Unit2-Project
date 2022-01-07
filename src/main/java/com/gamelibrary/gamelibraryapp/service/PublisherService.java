@@ -5,11 +5,13 @@ import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+@Service
 public class PublisherService {
     private PublisherRepository publisherRepository;
 
@@ -21,8 +23,8 @@ public class PublisherService {
     //Get all publishers in the publisher model
     public List<Publisher> getPublishers(){
     LOGGER.info("Calling getPublishers method from service");
-    List<Publisher> publishers = publisherRepository.findAll();
-    return publishers;
+    List<Publisher> publisher = publisherRepository.findAll();
+    return publisher;
     }
 
     //Get specific publisher in the model
