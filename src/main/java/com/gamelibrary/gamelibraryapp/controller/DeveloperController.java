@@ -4,8 +4,11 @@ import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.service.DeveloperService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -71,9 +74,12 @@ public class DeveloperController {
 
     //delete a single developer
     @DeleteMapping(path = "/developer/{developerId}")
-    public Optional<Developer> deleteDeveloper(@PathVariable Long developerId) {
+    public ResponseEntity<HashMap> deleteDeveloper(@PathVariable Long developerId) {
         LOGGER.info("calling deleteDeveloper method from controller");
-        return developerService.deleteDeveloper(developerId);
+        developerService.deleteDeveloper(developerId);
+        HashMap responseMessage = new HashMap();
+        responseMessage.put("status", "developer with id: " + developerId + " was successfully deleted.");
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
 
     }
 

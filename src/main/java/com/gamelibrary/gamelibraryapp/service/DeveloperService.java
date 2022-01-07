@@ -100,16 +100,16 @@ public class DeveloperService {
             }
     }
 
-    public Optional<Developer> deleteDeveloper(Long developerId) {
+    public void deleteDeveloper(Long developerId) {
         LOGGER.info("calling deleteDeveloper method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Developer> developer = developerRepository.findById(developerId);
-        if (developer.isPresent()) {
+        Developer developer = developerRepository.findByIdAndUserId(developerId, userDetails.getUser().getId());
+        if(developer == null){
+            throw new InformationNotFoundException("developer with id " + developerId + " does not exist or belong to this user");
+        }else{
             developerRepository.deleteById(developerId);
-            return developer;
-        } else {
-            throw new InformationNotFoundException("developer with id " + developerId + " is not found");
         }
+
 
     }
 
