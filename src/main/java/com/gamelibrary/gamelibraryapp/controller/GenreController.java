@@ -1,8 +1,6 @@
 package com.gamelibrary.gamelibraryapp.controller;
 
 
-import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
-import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.service.GenreService;
@@ -40,7 +38,7 @@ public Optional getGenre(@PathVariable Long genreId) {
 }
 //calls the service class to get a single genre in the model using genre id.
 @GetMapping(path = "/genre/{genreId}/game")
-public Optional<Game> getGamesInGenre(@PathVariable Long genreId) {
+public List<Game> getGamesInGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGamesInGenre method from controller");
         return genreService.getGamesInGenre(genreId);
 }

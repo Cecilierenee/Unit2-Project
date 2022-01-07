@@ -33,8 +33,7 @@ public class GenreService {
 
     public List<Genre> getGenres() {
         LOGGER.info("Calling getGenre method from service");
-        List<Genre> genre = genreRepository.findAll();
-        return genre;
+        return genreRepository.findAll();
     }
 
     public Optional getGenre(Long genreId) {
@@ -46,14 +45,11 @@ public class GenreService {
             throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
         }
 }
-    public Optional<Game> getGamesInGenre(Long genreId) {
+    public List<Game> getGamesInGenre(Long genreId) {
         LOGGER.info("Calling getGamesInGenre method from service");
-        Genre genre = genreRepository.findById(genreId).get();
-        if(genre != null) {
-            return gameRepository.findById(genreId);
-        } else {
-            throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
-        }
+        Optional <Genre> genre = getGenre(genreId);
+        return genre.get().getGameList();
+
     }
     public Genre createGenre(Genre genreObject) {
         LOGGER.info("Calling createGenre method from service");
@@ -66,12 +62,14 @@ public class GenreService {
     public Genre updateGenre(Long genreId, Genre genreObject) {
         LOGGER.info("Calling updateGenre method from service");
         Optional<Genre> genre = genreRepository.findById(genreId);
-        if(genre != null) {
+        if(genre.isPresent()) {
             if (genreObject.getName().equals(genre.get().getName())) {
                 throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
             } else {
-                genre.get().setName("genreObject");
-                return genreRepository.save(genreObject);
+                Genre updateGenre = genreRepository.findById(genreId).get();
+                updateGenre.setName(genreObject.getName());
+
+                return genreRepository.save(updateGenre);
             }
         } else {
             throw new InformationNotFoundException("Can not update " + genreId + "It does not exist");
@@ -79,11 +77,12 @@ public class GenreService {
     }
     public Optional<Genre> deleteGenre(Long genreId) {
         LOGGER.info("Calling deleteGenre method from controller");
-        if (genreRepository.findById(genreId).isPresent()) {
+        Optional<Genre> genre = genreRepository.findById(genreId);
+        if (genre.isPresent()) {
             genreRepository.deleteById(genreId);
+            return genre;
         } else {
             throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
         }
-        return null;
-    }
-}
+
+}}
