@@ -38,54 +38,58 @@ public class GenreService {
         return genreRepository.findAll();
     }
 
-    public Optional getGenre(Long genreId) {
+    public List<Genre> getGenre(Long genreId) {
         LOGGER.info("Calling getGenre method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Genre> genre = genreRepository.findById(genreId);
-        if (genre.isPresent()) {
-            return genre;
-        } else {
+        List<Genre> genre = genreRepository.findByUserId(userDetails.getUser().getId());
+        if (genre == null) {
             throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
+        } else {
+            return genre;
         }
 }
     public List<Game> getGamesInGenre(Long genreId) {
         LOGGER.info("Calling getGamesInGenre method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional <Genre> genre = getGenre(genreId);
-        return genre.get().getGameList();
-
+        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser().getId());
+        if (genre != null) {
+            return genre.getGameList();
+        } else {
+            throw new InformationNotFoundException("Genre with id " + genreId + " not found");
+        }
     }
+
     public Genre createGenre(Genre genreObject) {
         LOGGER.info("Calling createGenre method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Genre genre = genreRepository.findByName(genreObject.getName());
+        Genre genre = genreRepository.findByUserIdAndName(userDetails.getUser().getId(), genreObject.getName());
         if (genre != null) {
             throw new InformationExistException("Genre with" + genre.getName() + "already exist");
         } else {
+            genreObject.setUser(userDetails.getUser());
             return genreRepository.save(genreObject);
         }}
     public Genre updateGenre(Long genreId, Genre genreObject) {
         LOGGER.info("Calling updateGenre method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Genre> genre = genreRepository.findById(genreId);
-        if(genre.isPresent()) {
-            if (genreObject.getName().equals(genre.get().getName())) {
-                throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
+        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser());
+        if(genre != null) {
+            if (genreObject.getName().equals(genre.getName())) {
+                throw new InformationExistException("Genre " + genre.getName() + " already exist");
             } else {
-                Genre updateGenre = genreRepository.findById(genreId).get();
-                updateGenre.setName(genreObject.getName());
-
-                return genreRepository.save(updateGenre);
+               genre.setName(genreObject.getName());
+               genre.setUser(userDetails.getUser());
+               return genreRepository.save(genre);
             }
         } else {
             throw new InformationNotFoundException("Can not update " + genreId + "It does not exist");
         }
     }
-    public Optional<Genre> deleteGenre(Long genreId) {
+    public Genre deleteGenre(Long genreId) {
         LOGGER.info("Calling deleteGenre method from controller");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Genre> genre = genreRepository.findById(genreId);
-        if (genre.isPresent()) {
+        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser());
+        if (genre != null) {
             genreRepository.deleteById(genreId);
             return genre;
         } else {
