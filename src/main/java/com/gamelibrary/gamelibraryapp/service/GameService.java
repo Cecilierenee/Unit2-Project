@@ -148,18 +148,6 @@ public class GameService {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     public List<Developer> getDevelopers() {
         LOGGER.info("calling getDevelopers method from service");
         return developerRepository.findAll();

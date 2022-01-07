@@ -23,9 +23,8 @@ public class GameController {
     private GameService gameService;
 
 
-
     @Autowired
-    public void setGameService(GameService gameService){
+    public void setGameService(GameService gameService) {
         this.gameService = gameService;
     }
 
@@ -42,8 +41,8 @@ public class GameController {
     @GetMapping(path = "/game/{gameId}")
     public Optional<Game> getGame(@PathVariable Long gameId) {
         LOGGER.info("calling getGame method from controller");
-       return gameService.getGame(gameId);
-        }
+        return gameService.getGame(gameId);
+    }
 
 
     //Create a game
@@ -57,7 +56,7 @@ public class GameController {
     @PutMapping(path = "/game/{gameId}")
     public Game updateGame(@PathVariable(value = "gameId") Long gameId, @RequestBody Game gameObject) {
         LOGGER.info("calling updateGame method from controller");
-        return gameService.updateGame(gameId,gameObject);
+        return gameService.updateGame(gameId, gameObject);
 
     }
 
@@ -71,48 +70,50 @@ public class GameController {
 
 
     @GetMapping(path = "/game/{gameId}/genre/")
-    public List<Genre> getGenres(@PathVariable String gameId) {
+    public List<Genre> getGenres(@PathVariable Long gameId) {
         LOGGER.info("Calling getGenres method from controller");
         return gameService.getGenres();
     }
+
     //Calls the service class to get all genres in the model
     @GetMapping(path = "/game/{gameId}/genre/{genreId}")
-    public Optional getGenre(@PathVariable Long genreId, @PathVariable String gameId) {
+    public Optional getGenre(@PathVariable Long genreId, @PathVariable Long gameId) {
         LOGGER.info("Calling getGenre method from controller");
         return gameService.getGenre(genreId);
     }
+
     //calls the service class to get a single genre in the model using genre id.
     @GetMapping(path = "/game/{gameId}/genre/{genreId}/")
-    public Optional<Game> getGamesInGenre(@PathVariable Long genreId, @PathVariable String gameId) {
+    public Optional<Game> getGamesInGenre(@PathVariable Long genreId, @PathVariable Long gameId) {
         LOGGER.info("Calling getGamesInGenre method from controller");
         return gameService.getGamesInGenre(genreId);
     }
 
     //Calls the service class to get all the games in a single genre using the genre id.
     @PostMapping(path = "/game/{gameId}/genre")
-    public Genre createGenre(@PathVariable Genre genreObject, @PathVariable String gameId) {
+    public Genre createGenre(@PathVariable Genre genreObject, @PathVariable Long gameId) {
         LOGGER.info("Calling createGenre method from controller");
         return gameService.createGenre(genreObject);
     }
 
     //Calls the service class to allow the game to create a new genre.
     @PutMapping(path = "/game/{gameId}/genre/{genreId}")
-    public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @RequestBody Genre genreObject, @PathVariable String gameId) {
+    public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @RequestBody Genre genreObject, @PathVariable Long gameId) {
         LOGGER.info("Calling updateGenre method from controller");
         return gameService.updateGenre(genreId, genreObject);
     }
 
     //Calls the service class to allow a gamer to update a genre by the genre id.
     @DeleteMapping(path = "/game/{gameId}/genre/{genreId}")
-    public Optional<Genre> deleteGenre(@PathVariable Long genreId, @PathVariable String gameId) {
+    public Optional<Genre> deleteGenre(@PathVariable Long genreId, @PathVariable Long gameId) {
         LOGGER.info("Calling deleteGenre method from controller");
         return gameService.deleteGenre(genreId);
 
     }
 
-        //Get all developers
+    //Get all developers
     @GetMapping(path = "/game/{gameId}/genre/{genreId}/developer")
-    public List<Developer> getDevelopers(@PathVariable String gameId, @PathVariable String genreId) {
+    public List<Developer> getDevelopers(@PathVariable String gameId, @PathVariable Long genreId) {
         LOGGER.info("calling getDevelopers method from controller");
         return gameService.getDevelopers();
 
@@ -120,21 +121,21 @@ public class GameController {
 
     //Get a Single developer
     @GetMapping(path = "/game/{gameId}/genre/{genreId}/developer/{developerId}")
-    public Optional<Developer> getDeveloper(@PathVariable Long developerId, @PathVariable String gameId, @PathVariable String genreId) {
+    public Optional<Developer> getDeveloper(@PathVariable(value = "developerId") Long developerId, @PathVariable(value = "gameId") Long gameId, @PathVariable(value = "genreId") Long genreId) {
         LOGGER.info("calling getDeveloper method from controller");
         return gameService.getDeveloper(developerId);
     }
 
     //Get all games from a developer
     @GetMapping(path = "/game/{gameId}/genre/{genreId}/developer/{developerId}/")
-    public List<Game> getDeveloperGames(@PathVariable Long developerId, @PathVariable String gameId, @PathVariable String genreId) {
+    public List<Game> getDeveloperGames(@PathVariable(value = "developerId") Long developerId, @PathVariable(value = "gameId") Long gameId, @PathVariable(value = "genreId") Long genreId) {
         LOGGER.info("calling getDeveloperGames method from controller");
         return gameService.getDeveloperGames(developerId);
     }
 
     //Get single game from a developer
     @GetMapping(path = "/game/{gameId}/genre/{genreId}/developer/{developerId}/")
-    public Game getDeveloperGame(@PathVariable Long developerId, @PathVariable Long gameId, @PathVariable String genreId){
+    public Game getDeveloperGame(@PathVariable(value = "developerId") Long developerId, @PathVariable(value = "gameId") Long gameId, @PathVariable(value = "genreId") Long genreId) {
         LOGGER.info("calling getDeveloperGame method from controller");
         return gameService.getDeveloperGame(developerId, gameId);
     }
@@ -142,22 +143,22 @@ public class GameController {
 
     //Create a developer
     @PostMapping(path = "/game/{gameId}/genre/{genreId}/developer/")
-    public Developer createDeveloper(@RequestBody Developer developerObject, @PathVariable String gameId, @PathVariable String genreId) {
+    public Developer createDeveloper(@RequestBody Developer developerObject, @PathVariable Long gameId, @PathVariable Long genreId) {
         LOGGER.info("calling createDeveloper method from controller");
         return gameService.createDeveloper(developerObject);
     }
 
     //Update a single developer
     @PutMapping(path = "/game/{gameId}/genre/{genreId}/developer/{developerId}")
-    public Developer updateDeveloper(@PathVariable(value = "developerId") Long developerId, @RequestBody Developer developerObject, @PathVariable String gameId, @PathVariable String genreId) {
+    public Developer updateDeveloper(@PathVariable(value = "developerId") Long developerId, @RequestBody Developer developerObject, @PathVariable(value = "gameId") Long gameId, @PathVariable(value = "genreId") Long genreId) {
         LOGGER.info("calling updateDeveloper method from controller");
-        return gameService.updateDeveloper(developerId,developerObject);
+        return gameService.updateDeveloper(developerId, developerObject);
 
     }
 
     //delete a single developer
     @DeleteMapping(path = "/game/{gameId}/genre/{genreId}/developer/{developerId}")
-    public Optional<Developer> deleteDeveloper(@PathVariable Long developerId, @PathVariable String gameId, @PathVariable String genreId) {
+    public Optional<Developer> deleteDeveloper(@PathVariable(value = "developerId") Long developerId, @PathVariable(value = "gameId") Long gameId, @PathVariable(value = "genreId") Long genreId) {
         LOGGER.info("calling deleteDeveloper method from controller");
         return gameService.deleteDeveloper(developerId);
 
