@@ -58,11 +58,11 @@ public class GameService {
     public Optional<Game> getGame(Long gameId) {
         LOGGER.info("calling getGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Game> game = gameRepository.findById(gameId);
+        Optional<Game> game = Optional.ofNullable(gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId()));
         if (game.isPresent()) {
             return game;
         } else {
-            throw new InformationNotFoundException("game with id " + gameId + " is not found");
+            throw new InformationNotFoundException("game with id " + gameId + " is not found for this user");
         }
     }
 
