@@ -33,8 +33,8 @@ public class GenreService {
 
     public List<Genre> getGenres() {
         LOGGER.info("Calling getGenre method from service");
-        List<Genre> genres = genreRepository.findAll();
-        return genres;
+        List<Genre> genre = genreRepository.findAll();
+        return genre;
     }
 
     public Optional getGenre(Long genreId) {
