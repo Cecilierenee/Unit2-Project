@@ -83,12 +83,8 @@ public class DeveloperService {
     public Developer createDeveloper(Developer developerObject) {
         LOGGER.info("calling createDeveloper method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Developer developer = developerRepository.findByName(developerObject.getName());
-        if (developer != null) {
-            throw new InformationExistException("Game with name " + developer.getName() + " already exists");
-        } else {
-            return developerRepository.save(developerObject);
-        }
+        developerObject.setUser(userDetails.getUser());
+        return developerRepository.save(developerObject);
     }
 
     public Developer updateDeveloper(Long developerId,  Developer developerObject) {
