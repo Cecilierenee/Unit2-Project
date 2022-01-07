@@ -20,7 +20,7 @@ public class Genre {
 
 
 
-    @OneToMany
+    @OneToMany(mappedBy = "genre", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Game> gameList;
     //One Genre can have more than one game.

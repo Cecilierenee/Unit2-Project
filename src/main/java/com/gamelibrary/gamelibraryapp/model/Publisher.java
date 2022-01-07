@@ -18,6 +18,10 @@ public class Publisher {
     @Column
     private String name;
 
+    @OneToMany(mappedBy = "publisher", orphanRemoval = true) // One Label can have many artists
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Developer> developerList;
+
 
     public Publisher() {
     }

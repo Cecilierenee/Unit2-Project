@@ -22,11 +22,22 @@ public class Developer {
     private String name;
 
 
-   @OneToMany
+   @OneToMany(mappedBy = "developer", orphanRemoval = true)
    @LazyCollection(LazyCollectionOption.FALSE)
    //One Developer can have more than one game
     private List<Game> gameList;
 
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
+    }
 
 
     public Developer() {
