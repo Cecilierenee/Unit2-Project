@@ -1,8 +1,11 @@
 package com.gamelibrary.gamelibraryapp.service;
 
 import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
+import com.gamelibrary.gamelibraryapp.model.Request.LoginRequest;
+import com.gamelibrary.gamelibraryapp.model.Response.LoginResponse;
 import com.gamelibrary.gamelibraryapp.model.User;
 import com.gamelibrary.gamelibraryapp.repository.UserRepository;
+import com.gamelibrary.gamelibraryapp.security.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

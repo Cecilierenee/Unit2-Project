@@ -26,6 +26,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     public void setMyUserDetailsService(MyUserDetailsService myUserDetailsService) {
         this.myUserDetailsService = myUserDetailsService;
     }
+
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
@@ -70,3 +71,4 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         return (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
     }
+}
