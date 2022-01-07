@@ -90,20 +90,14 @@ public class DeveloperService {
     public Developer updateDeveloper(Long developerId,  Developer developerObject) {
         LOGGER.info("calling updateDeveloper method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Developer> developer = developerRepository.findById(developerId);
-        if (developer.isPresent()) {
-            if (developerObject.getName().equals(developer.get().getName())) {
-                throw new InformationExistException("developer " + developer.get().getName() + " already exist");
+        Developer developer = developerRepository.findByIdAndUserId(developerId, userDetails.getUser().getId());
+        if (developer == null) {
+                throw new InformationExistException("developer with id  " + developerId + " not found");
             } else {
-                Developer updateDeveloper = developerRepository.findById(developerId).get();
-                updateDeveloper.setName(developerObject.getName());
-
-                return developerRepository.save(updateDeveloper);
+                developer.setName(developerObject.getName());
+                developer.setUser(userDetails.getUser());
+                return developerRepository.save(developer);
             }
-        } else {
-            throw new InformationNotFoundException("developer with id " + developerId + " not found");
-        }
-
     }
 
     public Optional<Developer> deleteDeveloper(Long developerId) {
