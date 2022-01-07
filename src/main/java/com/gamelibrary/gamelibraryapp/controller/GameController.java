@@ -1,9 +1,6 @@
 package com.gamelibrary.gamelibraryapp.controller;
 
-import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
-import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
-import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import com.gamelibrary.gamelibraryapp.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -61,7 +58,7 @@ public class GameController {
 
     //Delete a single game
     @DeleteMapping(path = "/game/{gameId}")
-    public Optional<Game> deleteGame(@PathVariable Long gameId) {
+    public Game deleteGame(@PathVariable Long gameId) {
         LOGGER.info("calling deleteGame method from controller");
         return gameService.deleteGame(gameId);
 

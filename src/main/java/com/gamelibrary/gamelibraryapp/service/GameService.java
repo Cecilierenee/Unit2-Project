@@ -94,12 +94,12 @@ public class GameService {
                 return gameRepository.save(game);
             }
     }
-    
-    public Optional<Game> deleteGame(Long gameId) {
+
+    public Game deleteGame(Long gameId) {
         LOGGER.info("calling deleteGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Game> game = gameRepository.findById(gameId);
-        if (game.isPresent()) {
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
             gameRepository.deleteById(gameId);
             return game;
         } else {
