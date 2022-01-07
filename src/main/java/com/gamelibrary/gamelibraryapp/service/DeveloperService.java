@@ -7,6 +7,7 @@ import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
+import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
 import com.gamelibrary.gamelibraryapp.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,7 @@ public class DeveloperService {
     private static final Logger LOGGER = Logger.getLogger(DeveloperService.class.getName());
 
     private DeveloperRepository developerRepository;
+    private PublisherRepository publisherRepository;
 
 
     @Autowired
@@ -31,11 +33,15 @@ public class DeveloperService {
         this.developerRepository = developerRepository;
     }
 
+    @Autowired
+    public void setPublisherRepository(PublisherRepository publisherRepository){
+        this.publisherRepository = publisherRepository;
+    }
+
     public List<Developer> getDevelopers() {
         LOGGER.info("calling getDevelopers method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return developerRepository.findAll();
-
+        return developerRepository.findByUserId(userDetails.getUser().getId());
     }
 
     public List<Game> getDeveloperGames(Long developerId){
