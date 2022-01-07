@@ -5,7 +5,9 @@ import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
+import com.gamelibrary.gamelibraryapp.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,12 +31,14 @@ public class GameService {
 
     public List<Game> getGames() {
         LOGGER.info("calling getGames method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return gameRepository.findAll();
 
     }
 
     public Optional<Game> getGame(Long gameId) {
         LOGGER.info("calling getGame method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Game> game = gameRepository.findById(gameId);
         if (game.isPresent()) {
             return game;
@@ -45,6 +49,7 @@ public class GameService {
 
     public Game createGame(Game gameObject) {
         LOGGER.info("calling createGame method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Game game = gameRepository.findByName(gameObject.getName());
         if (game != null) {
             throw new InformationExistException("Game with name " + game.getName() + " already exists");
@@ -55,6 +60,7 @@ public class GameService {
 
     public Game updateGame(Long gameId, @RequestBody Game gameObject) {
         LOGGER.info("calling updateGame method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Game> game = gameRepository.findById(gameId);
         if (game.isPresent()) {
             if (gameObject.getName().equals(game.get().getName())) {
@@ -75,6 +81,7 @@ public class GameService {
     }
     public Optional<Game> deleteGame(Long gameId) {
         LOGGER.info("calling deleteGame method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Game> game = gameRepository.findById(gameId);
         if (game.isPresent()) {
             gameRepository.deleteById(gameId);
