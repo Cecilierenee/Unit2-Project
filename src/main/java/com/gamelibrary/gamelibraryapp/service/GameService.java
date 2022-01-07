@@ -55,24 +55,25 @@ public class GameService {
 
     }
 
-    public Optional<Game> getGame(Long gameId) {
+    public Game getGame(Long gameId) {
         LOGGER.info("calling getGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Game> game = Optional.ofNullable(gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId()));
-        if (game.isPresent()) {
-            return game;
-        } else {
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
             throw new InformationNotFoundException("game with id " + gameId + " is not found for this user");
+        } else {
+            return game;
         }
     }
 
     public Game createGame(Game gameObject) {
         LOGGER.info("calling createGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Game game = gameRepository.findByName(gameObject.getName());
+        Game game = gameRepository.findByUserIdAndName(userDetails.getUser().getId(), gameObject.getName());
         if (game != null) {
             throw new InformationExistException("Game with name " + game.getName() + " already exists");
         } else {
+            gameObject.setUser(userDetails.getUser());
             return gameRepository.save(gameObject);
         }
     }

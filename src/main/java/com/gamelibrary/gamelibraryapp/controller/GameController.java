@@ -40,7 +40,7 @@ public class GameController {
     @GetMapping(path = "/game/{gameId}")
     public Optional<Game> getGame(@PathVariable Long gameId) {
         LOGGER.info("calling getGame method from controller");
-       return gameService.getGame(gameId);
+       return Optional.ofNullable(gameService.getGame(gameId));
         }
 
 
