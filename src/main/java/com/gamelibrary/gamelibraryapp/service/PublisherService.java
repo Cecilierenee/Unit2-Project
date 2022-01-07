@@ -2,9 +2,9 @@ package com.gamelibrary.gamelibraryapp.service;
 
 import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
-import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +17,7 @@ public class PublisherService {
 
     public static final Logger LOGGER = Logger.getLogger(PublisherService.class.getName());
 
+    @Autowired
     public void setPublisherRepository(PublisherRepository publisherRepository){
         this.publisherRepository = publisherRepository;
     }
@@ -27,11 +28,11 @@ public class PublisherService {
     }
 
     //Get specific publisher in the model
-    public Publisher getPublisher(Long publisherId) {
+    public Optional<Publisher> getPublisher(Long publisherId) {
         LOGGER.info("Calling getPublisher method from service");
         Optional<Publisher> publisher = publisherRepository.findById(publisherId);
-        if (publisher != null) {
-            return publisher.get();
+        if (publisher.isPresent()) {
+            return publisher;
         } else {
             throw new InformationNotFoundException("Publisher with id " + publisherId + "Does not exist" );
         }
@@ -50,7 +51,7 @@ public class PublisherService {
     public Publisher updatePublisher(Long publisherId, Publisher publisherObject) {
         LOGGER.info("Calling updatePublisher method from service");
         Optional <Publisher> publisher = publisherRepository.findById(publisherId);
-        if(publisher != null) {
+        if(publisher.isPresent()) {
             if (publisherObject.getName().equals(publisher.get().getName())) {
                 throw new InformationExistException("Genre " + publisher.get().getName() + " already exist");
             } else {
@@ -64,11 +65,12 @@ public class PublisherService {
         }
     }
     //Delete a publisher from the publisher model.
-    public void deletePublisher(Long publisherId) {
+    public Optional<Publisher> deletePublisher(Long publisherId) {
         LOGGER.info("Calling deletePublisher method from controller");
-        if (publisherRepository.findById(publisherId).isPresent()) {
+        Optional<Publisher> publisher = publisherRepository.findById(publisherId);
+        if (publisher.isPresent()) {
             publisherRepository.deleteById(publisherId);
-
+            return publisher;
         } else {
             throw new InformationNotFoundException("Genre with " + publisherId + " does not exist");
 

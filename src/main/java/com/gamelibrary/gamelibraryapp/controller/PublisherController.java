@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @RestController
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
 public class PublisherController {
 
     public static final Logger LOGGER = Logger.getLogger(PublisherController.class.getName());
+
     private PublisherService publisherService;
 
     @Autowired
@@ -31,7 +33,7 @@ public class PublisherController {
 
     //Get a single publisher
     @GetMapping(path = "/publisher/{publisherId}")
-    public Publisher getPublisher(@PathVariable Long publisherId){
+    public Optional<Publisher> getPublisher(@PathVariable Long publisherId){
         LOGGER.info("Calling getPublisher method from controller");
         return publisherService.getPublisher(publisherId);
     }
@@ -52,8 +54,8 @@ public class PublisherController {
 
     //Delete a single publisher
     @DeleteMapping(path = "/publisher/{publisherId}")
-    public void deletePublisher(@PathVariable Long publisherId){
+    public Optional<Publisher> deletePublisher(@PathVariable Long publisherId){
         LOGGER.info("Calling deletePublisher method from controller");
-        publisherService.deletePublisher(publisherId);
+        return publisherService.deletePublisher(publisherId);
     }
 }
