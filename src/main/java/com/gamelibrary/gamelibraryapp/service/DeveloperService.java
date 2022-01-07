@@ -7,7 +7,9 @@ import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
+import com.gamelibrary.gamelibraryapp.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,18 +33,21 @@ public class DeveloperService {
 
     public List<Developer> getDevelopers() {
         LOGGER.info("calling getDevelopers method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return developerRepository.findAll();
 
     }
 
     public List<Game> getDeveloperGames(Long developerId){
         LOGGER.info("calling getDeveloperGames method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Developer> developer = getDeveloper(developerId);
         return developer.get().getGameList();
     }
 
     public Game getDeveloperGame(Long developerId, Long gameId){
         LOGGER.info("calling getDeveloperGame method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Game> game = getDeveloperGames(developerId).stream().filter(x -> x.getId().equals(gameId)).findFirst();
         if (game.isPresent()){
             return game.get();
@@ -55,6 +60,7 @@ public class DeveloperService {
 
     public Optional<Developer> getDeveloper(Long developerId) {
         LOGGER.info("calling getDeveloper method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Developer> developer = developerRepository.findById(developerId);
         if (developer.isPresent()) {
             return developer;
@@ -68,6 +74,7 @@ public class DeveloperService {
 
     public Developer createDeveloper(Developer developerObject) {
         LOGGER.info("calling createDeveloper method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Developer developer = developerRepository.findByName(developerObject.getName());
         if (developer != null) {
             throw new InformationExistException("Game with name " + developer.getName() + " already exists");
@@ -78,6 +85,7 @@ public class DeveloperService {
 
     public Developer updateDeveloper(Long developerId,  Developer developerObject) {
         LOGGER.info("calling updateDeveloper method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Developer> developer = developerRepository.findById(developerId);
         if (developer.isPresent()) {
             if (developerObject.getName().equals(developer.get().getName())) {
@@ -96,6 +104,7 @@ public class DeveloperService {
 
     public Optional<Developer> deleteDeveloper(Long developerId) {
         LOGGER.info("calling deleteDeveloper method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Developer> developer = developerRepository.findById(developerId);
         if (developer.isPresent()) {
             developerRepository.deleteById(developerId);
