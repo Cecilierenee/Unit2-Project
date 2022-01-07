@@ -36,61 +36,34 @@ public List<Genre> getGenres() {
 @GetMapping(path = "/genre/{genreId}")
 public Optional getGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGenre method from controller");
-    Optional<Genre> genre = genreService.getGenre(genreId);
-    if (genre.isPresent()) {
-        return genre;
-    } else {
-        throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
-    }
+        return genreService.getGenre(genreId);
 }
 //calls the service class to get a single genre in the model using genre id.
 @GetMapping(path = "/genre/{genreId}/game")
 public Optional<Game> getGamesInGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling getGamesInGenre method from controller");
-    Optional<Game> genre = getGamesInGenre(genreId);
-    if (genre != null){
         return genreService.getGamesInGenre(genreId);
-    } else {
-        throw new InformationNotFoundException("Genre with " + genreId + " does not contain any games");
-    }
 }
+
 //Calls the service class to get all the games in a single genre using the genre id.
 @PostMapping(path = "/genre")
 public Genre createGenre(@PathVariable Genre genreObject) {
     LOGGER.info("Calling createGenre method from controller");
-    Genre genre = genreService.createGenre(genreObject);
-    if (genre != null) {
-        throw new InformationExistException("Genre with" + genre.getName() + "already exist");
-    } else {
-        return genreService.createGenre(genreObject);
-}}
+    return genreService.createGenre(genreObject);
+}
+
 //Calls the service class to allow the game to create a new genre.
 @PutMapping(path = "/genre/{genreId}")
 public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @RequestBody Genre genreObject) {
     LOGGER.info("Calling updateGenre method from controller");
-    Optional<Genre> genre = Optional.ofNullable(genreService.updateGenre(genreId, genreObject));
-    Genre updateGenre = null;
-    if (genre.isPresent()) {
-        if (genreObject.getName().equals(genre.get().getName())) {
-            throw new InformationExistException("Genre " + genre.get().getName() + " already exist");
-        } else {
-            updateGenre = genreService.updateGenre(genreId, genreObject);
-            updateGenre.setName(genreObject.getName());
-        }
-    }
     return genreService.updateGenre(genreId, genreObject);
 }
+
 //Calls the service class to allow a gamer to update a genre by the genre id.
 @DeleteMapping(path = "/genre/{genreId}")
 public Optional<Genre> deleteGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling deleteGenre method from controller");
-    Optional<Genre> genre = genreService.deleteGenre(genreId);
-    if (genre.isPresent()) {
-        genreService.deleteGenre(genreId);
-        return genre;
-    } else {
-        throw new InformationNotFoundException("Genre with " + genreId + " does not exist");
-    }
+        return genreService.deleteGenre(genreId);
 }
 //Calls the service class to allow a gamer to delete a specific genre using the genre id.
 }
