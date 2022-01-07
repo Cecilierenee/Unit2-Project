@@ -23,8 +23,7 @@ public class PublisherService {
     //Get all publishers in the publisher model
     public List<Publisher> getPublishers(){
     LOGGER.info("Calling getPublishers method from service");
-    List<Publisher> publisher = publisherRepository.findAll();
-    return publisher;
+    return publisherRepository.findAll();
     }
 
     //Get specific publisher in the model
@@ -40,7 +39,7 @@ public class PublisherService {
     //Create a publisher in the model
     public Publisher createPublisher(Publisher publisherObject) {
         LOGGER.info("Calling createPublisher method from service");
-        Publisher publisher = createPublisher(publisherObject);
+        Publisher publisher = publisherRepository.findByName(publisherObject.getName());
         if (publisher != null) {
             throw new InformationExistException("Genre with" + publisher.getName() + "already exist");
         } else {
@@ -50,12 +49,14 @@ public class PublisherService {
     //Update publisher in the publisher model
     public Publisher updatePublisher(Long publisherId, Publisher publisherObject) {
         LOGGER.info("Calling updatePublisher method from service");
-        Publisher publisher = updatePublisher(publisherId, publisherObject);
+        Optional <Publisher> publisher = publisherRepository.findById(publisherId);
         if(publisher != null) {
-            if (publisher.getName().equals(publisher.getName())) {
-                throw new InformationExistException("Genre " + publisher.getName() + " already exist");
+            if (publisherObject.getName().equals(publisher.get().getName())) {
+                throw new InformationExistException("Genre " + publisher.get().getName() + " already exist");
             } else {
-                publisher.setName(publisher.getName());
+                Publisher updatePublisher = publisherRepository.findById(publisherId).get();
+                updatePublisher.setName(publisherObject.getName());
+
                 return publisherRepository.save(publisherObject);
             }
         } else {
