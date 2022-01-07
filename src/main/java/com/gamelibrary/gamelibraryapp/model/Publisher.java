@@ -1,9 +1,27 @@
 package com.gamelibrary.gamelibraryapp.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "publishers")
 public class Publisher {
 
+    @Id
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
     private String name;
+
+
+    @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Game> gameList;
 
     public Publisher() {
     }
@@ -27,5 +45,13 @@ public class Publisher {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Game> getGameList() {
+        return gameList;
+    }
+
+    public void setGameList(List<Game> gameList) {
+        this.gameList = gameList;
     }
 }
