@@ -46,9 +46,12 @@ public class DeveloperService {
 
     public List<Game> getDeveloperGames(Long developerId){
         LOGGER.info("calling getDeveloperGames method from service");
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Developer> developer = getDeveloper(developerId);
-        return developer.get().getGameList();
+        Developer developer = getDeveloper(developerId);
+        if(developer != null) {
+            return developer.getGameList();
+        }else{
+            throw new InformationNotFoundException("The developer with id " + developerId + " does not exist");
+        }
     }
 
     public Game getDeveloperGame(Long developerId, Long gameId){
@@ -64,14 +67,14 @@ public class DeveloperService {
     }
 
 
-    public Optional<Developer> getDeveloper(Long developerId) {
+    public Developer getDeveloper(Long developerId) {
         LOGGER.info("calling getDeveloper method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Developer> developer = developerRepository.findById(developerId);
+        Optional<Developer> developer = Optional.ofNullable(developerRepository.findByIdAndUserId(developerId, userDetails.getUser().getId()));
         if (developer.isPresent()) {
-            return developer;
+            return developer.get();
         } else {
-            throw new InformationNotFoundException("game with id " + developerId + " is not found");
+            throw new InformationNotFoundException("developer with id " + developerId + " is not found");
         }
     }
 

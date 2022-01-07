@@ -36,7 +36,7 @@ public class DeveloperController {
     @GetMapping(path = "/developer/{developerId}")
     public Optional<Developer> getDeveloper(@PathVariable Long developerId) {
         LOGGER.info("calling getDeveloper method from controller");
-        return developerService.getDeveloper(developerId);
+        return Optional.ofNullable(developerService.getDeveloper(developerId));
     }
 
     //Get all games from a developer

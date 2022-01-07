@@ -11,4 +11,6 @@ public interface DeveloperRepository extends JpaRepository<Developer,Long> {
     Developer findByName(String developerName);
 
     List<Developer> findByUserId(Long userId);
+
+    Developer findByIdAndUserId(Long developerId, Long userId);
 }
