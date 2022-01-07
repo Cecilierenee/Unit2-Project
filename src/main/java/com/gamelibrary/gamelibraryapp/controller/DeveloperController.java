@@ -44,6 +44,12 @@ public class DeveloperController {
         return developerService.getDeveloperGames(developerId);
     }
 
+    @GetMapping(path = "/developer/{developerId}/game/{gameId}")
+    public Game getDeveloperGame(@PathVariable Long developerId, @PathVariable Long gameId){
+        LOGGER.info("calling getDeveloperGame method from controller");
+        return developerService.getDeveloperGame(developerId, gameId);
+    }
+
 
     @PostMapping(path = "/developer/")
     public Developer createDeveloper(@RequestBody Developer developerObject) {
