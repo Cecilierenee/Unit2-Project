@@ -36,14 +36,14 @@ public class PublisherService {
     }
 
     //Get specific publisher in the model
-    public Optional<Publisher> getPublisher(Long publisherId) {
+    public Publisher getPublisher(Long publisherId) {
         LOGGER.info("Calling getPublisher method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Publisher> publisher = publisherRepository.findById(publisherId);
-        if (publisher.isPresent()) {
-            return publisher;
-        } else {
+        Publisher publisher = publisherRepository.findByIdAndUserId(publisherId, userDetails.getUser().getId())
+        if (publisher == null) {
             throw new InformationNotFoundException("Publisher with id " + publisherId + "Does not exist" );
+        } else {
+            return publisher;
         }
     }
     //Create a publisher in the model
