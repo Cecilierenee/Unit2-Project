@@ -4,7 +4,9 @@ import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
+import com.gamelibrary.gamelibraryapp.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +26,19 @@ public class PublisherService {
     //Get all publishers in the publisher model
     public List<Publisher> getPublishers(){
     LOGGER.info("Calling getPublishers method from service");
-    return publisherRepository.findAll();
+    MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    List<Publisher> publishers = publisherRepository.findByUserId(userDetails.getUser().getId());
+    if(publishers.isEmpty()){
+        throw new InformationNotFoundException("No publishers found for that user " + userDetails.getUser().getId())
+    } else {
+        return publishers;
+    }
     }
 
     //Get specific publisher in the model
     public Optional<Publisher> getPublisher(Long publisherId) {
         LOGGER.info("Calling getPublisher method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Publisher> publisher = publisherRepository.findById(publisherId);
         if (publisher.isPresent()) {
             return publisher;
@@ -40,6 +49,7 @@ public class PublisherService {
     //Create a publisher in the model
     public Publisher createPublisher(Publisher publisherObject) {
         LOGGER.info("Calling createPublisher method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Publisher publisher = publisherRepository.findByName(publisherObject.getName());
         if (publisher != null) {
             throw new InformationExistException("Genre with" + publisher.getName() + "already exist");
@@ -50,6 +60,7 @@ public class PublisherService {
     //Update publisher in the publisher model
     public Publisher updatePublisher(Long publisherId, Publisher publisherObject) {
         LOGGER.info("Calling updatePublisher method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional <Publisher> publisher = publisherRepository.findById(publisherId);
         if(publisher.isPresent()) {
             if (publisherObject.getName().equals(publisher.get().getName())) {
@@ -67,6 +78,7 @@ public class PublisherService {
     //Delete a publisher from the publisher model.
     public Optional<Publisher> deletePublisher(Long publisherId) {
         LOGGER.info("Calling deletePublisher method from controller");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Publisher> publisher = publisherRepository.findById(publisherId);
         if (publisher.isPresent()) {
             publisherRepository.deleteById(publisherId);
