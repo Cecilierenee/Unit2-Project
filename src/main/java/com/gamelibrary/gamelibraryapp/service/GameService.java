@@ -4,7 +4,9 @@ package com.gamelibrary.gamelibraryapp.service;
 import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Game;
+import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
+import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
 import com.gamelibrary.gamelibraryapp.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,16 +25,33 @@ public class GameService {
 
     private static final Logger LOGGER = Logger.getLogger(GameService.class.getName());
     private GameRepository gameRepository;
+    private DeveloperRepository developerRepository;
+    private GenreRepository genreRepository;
 
     @Autowired
     public void setGameRepository(GameRepository gameRepository){
         this.gameRepository = gameRepository;
     }
 
+    @Autowired
+    public void setDeveloperRepository(DeveloperRepository developerRepository){
+        this.developerRepository = developerRepository;
+    }
+
+    public void setGenreRepository(GenreRepository genreRepository){
+        this.genreRepository = genreRepository;
+    }
+
     public List<Game> getGames() {
         LOGGER.info("calling getGames method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return gameRepository.findAll();
+        List<Game> game = gameRepository.findByUserId(userDetails.getUser().getId());
+        if(game.isEmpty()){
+            throw new InformationNotFoundException("No games found for user id " + userDetails.getUser().getId());
+        }else{
+            return game;
+        }
+
 
     }
 
