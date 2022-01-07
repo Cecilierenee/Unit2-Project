@@ -19,10 +19,6 @@ public class Publisher {
     private String name;
 
 
-    @OneToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Game> gameList;
-
     public Publisher() {
     }
 
@@ -47,11 +43,4 @@ public class Publisher {
         this.name = name;
     }
 
-    public List<Game> getGameList() {
-        return gameList;
-    }
-
-    public void setGameList(List<Game> gameList) {
-        this.gameList = gameList;
-    }
 }

@@ -33,6 +33,10 @@ public class Game {
 @JoinColumn(name = "developer_id")
 private Developer developer;
 
+@JsonIgnore
+@ManyToOne
+@JoinColumn(name = "genre_id")
+private Genre genre;
 
 
 
