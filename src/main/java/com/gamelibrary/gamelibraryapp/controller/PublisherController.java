@@ -22,30 +22,35 @@ public class PublisherController {
         this.publisherService = publisherService;
     }
 
+    //Get all publishers
     @GetMapping(path = "/publisher")
     public List<Publisher> getPublishers(){
         LOGGER.info("Calling getPublishers method from controller");
         return publisherService.getPublishers();
     }
 
+    //Get a single publisher
     @GetMapping(path = "/publisher/{publisherId}")
     public Publisher getPublisher(@PathVariable Long publisherId){
         LOGGER.info("Calling getPublisher method from controller");
         return publisherService.getPublisher(publisherId);
     }
 
+    //Create a publisher
     @PostMapping(path = "/publisher")
     public Publisher createPublisher(@RequestBody Publisher publisherObject){
         LOGGER.info("Calling createPublisher method from controller");
         return publisherService.createPublisher(publisherObject);
     }
 
+    //Update a single publisher
     @PutMapping(path = "/publisher/{publisherId}")
     public Publisher updatePublisher(@PathVariable Long publisherId, @RequestBody Publisher publisherObject){
         LOGGER.info("Calling updatePublisher method from controller");
         return publisherService.updatePublisher(publisherId, publisherObject);
     }
 
+    //Delete a single publisher
     @DeleteMapping(path = "/publisher/{publisherId}")
     public void deletePublisher(@PathVariable Long publisherId){
         LOGGER.info("Calling deletePublisher method from controller");
