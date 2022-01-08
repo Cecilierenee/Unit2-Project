@@ -67,4 +67,13 @@ public class Publisher {
     }
     /********** user getters and setters **********/
 
+    public List<Developer> getDeveloperList() {
+        return developerList;
+    }
+
+    public void setDeveloperList(List<Developer> developerList) {
+        this.developerList = developerList;
+    }
+
+    
 }

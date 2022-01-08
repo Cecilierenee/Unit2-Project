@@ -29,6 +29,7 @@ public class Developer {
 
     @ManyToOne
     @JoinColumn(name = "publisher_id")
+    @JsonIgnore
     private Publisher publisher;
 
     /********** add user **********/
@@ -85,9 +86,12 @@ public class Developer {
     public List<Game> getGameList(){
         return gameList;
     }
+
     public void setGameList(List<Game> gameList){
         this.gameList = gameList;
     }
+
+
 
 
 }
