@@ -59,7 +59,7 @@ public Genre updateGenre(@PathVariable(value = "genreId") Long genreId, @Request
 
 //Calls the service class to allow a gamer to update a genre by the genre id.
 @DeleteMapping(path = "/genre/{genreId}")
-public Optional<Genre> deleteGenre(@PathVariable Long genreId) {
+public Genre deleteGenre(@PathVariable Long genreId) {
     LOGGER.info("Calling deleteGenre method from controller");
         return genreService.deleteGenre(genreId);
 }
