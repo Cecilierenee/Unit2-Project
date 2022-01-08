@@ -38,10 +38,10 @@ public class GenreService {
         return genreRepository.findAll();
     }
 
-    public List<Genre> getGenre(Long genreId) {
+    public Genre getGenre(Long genreId) {
         LOGGER.info("Calling getGenre method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<Genre> genre = genreRepository.findByUserId(userDetails.getUser().getId());
+        Genre genre =  genreRepository.findByIdAndUserId(genreId, userDetails.getUser().getId());
         if (genre == null) {
             throw new InformationNotFoundException("Genre with " +genreId + "Does not exist");
         } else {
@@ -72,7 +72,7 @@ public class GenreService {
     public Genre updateGenre(Long genreId, Genre genreObject) {
         LOGGER.info("Calling updateGenre method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser());
+        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser().getId());
         if(genre != null) {
             if (genreObject.getName().equals(genre.getName())) {
                 throw new InformationExistException("Genre " + genre.getName() + " already exist");
@@ -88,7 +88,7 @@ public class GenreService {
     public Genre deleteGenre(Long genreId) {
         LOGGER.info("Calling deleteGenre method from controller");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser());
+        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser().getId());
         if (genre != null) {
             genreRepository.deleteById(genreId);
             return genre;
