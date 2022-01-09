@@ -28,15 +28,15 @@ public class Developer {
 
 
 
-   @OneToMany(mappedBy = "developer", orphanRemoval = true)
-   @LazyCollection(LazyCollectionOption.FALSE)
-   //One Developer can have more than one game
-    private List<Game> gameList;
-
-    @ManyToOne
-    @JoinColumn(name = "publisher_id")
-    @JsonIgnore
-    private Publisher publisher;
+//   @OneToMany(mappedBy = "developer", orphanRemoval = true)
+//   @LazyCollection(LazyCollectionOption.FALSE)
+//   //One Developer can have more than one game
+//    private List<Game> gameList;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "publisher_id")
+//    @JsonIgnore
+//    private Publisher publisher;
 
     /********** add user **********/
     // many categories belong to a one user
@@ -56,13 +56,13 @@ public class Developer {
     }
     /********** user getters and setters **********/
 
-    public Publisher getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
-    }
+//    public Publisher getPublisher() {
+//        return publisher;
+//    }
+//
+//    public void setPublisher(Publisher publisher) {
+//        this.publisher = publisher;
+//    }
 
 
     public Developer() {
@@ -89,13 +89,13 @@ public class Developer {
         this.name = name;
     }
 
-    public List<Game> getGameList(){
-        return gameList;
-    }
-
-    public void setGameList(List<Game> gameList){
-        this.gameList = gameList;
-    }
+//    public List<Game> getGameList(){
+//        return gameList;
+//    }
+//
+//    public void setGameList(List<Game> gameList){
+//        this.gameList = gameList;
+//    }
 
     public void setGame(Game game){
         this.game = game;

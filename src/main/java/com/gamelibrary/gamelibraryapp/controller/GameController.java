@@ -3,6 +3,7 @@ package com.gamelibrary.gamelibraryapp.controller;
 import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
+import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -152,7 +153,7 @@ public class GameController {
     }
 
     //delete a single developer
-    @DeleteMapping(path = "/developer/{developerId}")
+    @DeleteMapping(path = "/game/{gameId}/developer/{developerId}")
     public ResponseEntity<HashMap> deleteDeveloper(@PathVariable(value = "gameId")Long gameId, @PathVariable(value = "developerId") Long developerId) {
         LOGGER.info("calling deleteDeveloper method from controller");
         gameService.deleteDeveloper(gameId,developerId);
@@ -162,7 +163,43 @@ public class GameController {
 
     }
 
+    //Get all publishers
+    @GetMapping(path = "/game/{gameId}/publisher")
+    public List<Publisher> getPublishers(@PathVariable(value = "gameId")Long gameId){
+        LOGGER.info("Calling getPublishers method from controller");
+        return gameService.getPublishers(gameId);
+    }
 
+    //Get a single publisher
+    @GetMapping(path = "/game/{gameId}/publisher/{publisherId}")
+    public Publisher getPublisher(@PathVariable(value = "gameId")Long gameId, @PathVariable(value = "publisherId") Long publisherId){
+        LOGGER.info("Calling getPublisher method from controller");
+        return gameService.getPublisher(gameId,publisherId);
+    }
+
+    //Create a publisher
+    @PostMapping(path = "/game/{gameId}/publisher")
+    public Publisher createPublisher(@PathVariable(value = "gameId")Long gameId,@RequestBody Publisher publisherObject){
+        LOGGER.info("Calling createPublisher method from controller");
+        return gameService.createPublisher(gameId,publisherObject);
+    }
+
+    //Update a single publisher
+    @PutMapping(path = "/game/{gameId}/publisher/{publisherId}")
+    public Publisher updatePublisher(@PathVariable(value = "gameId")Long gameId,@PathVariable(value = "publisherId") Long publisherId, @RequestBody Publisher publisherObject){
+        LOGGER.info("Calling updatePublisher method from controller");
+        return gameService.updatePublisher(gameId,publisherId, publisherObject);
+    }
+
+    //Delete a single publisher
+    @DeleteMapping(path = "/game/{gameId}/publisher/{publisherId}")
+    public ResponseEntity<HashMap> deletePublisher(@PathVariable(value = "gameId")Long gameId,@PathVariable Long publisherId){
+        LOGGER.info("Calling deletePublisher method from controller");
+        gameService.deletePublisher(gameId,publisherId);
+        HashMap responseMessage = new HashMap();
+        responseMessage.put("status", "publisher: " +publisherId + " was deleted");
+        return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
+    }
 
 
 

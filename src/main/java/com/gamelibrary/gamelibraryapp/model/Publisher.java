@@ -19,9 +19,10 @@ public class Publisher {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "publisher", orphanRemoval = true) // One publisher can have many developers
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Developer> developerList;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 
     /********** add user **********/
     // many categories belong to a one user
@@ -67,12 +68,12 @@ public class Publisher {
     }
     /********** user getters and setters **********/
 
-    public List<Developer> getDeveloperList() {
-        return developerList;
+    public void setGame(Game game){
+        this.game = game;
     }
 
-    public void setDeveloperList(List<Developer> developerList) {
-        this.developerList = developerList;
+    public Game getGame() {
+        return game;
     }
 
 

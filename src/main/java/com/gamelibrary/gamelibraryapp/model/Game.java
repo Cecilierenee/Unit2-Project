@@ -40,6 +40,10 @@ public class Game {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Developer> developerList;
 
+    @OneToMany(mappedBy = "game", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Publisher> publisherList;
+
     /********** add user **********/
     // many categories belong to a one user
     @ManyToOne
@@ -49,10 +53,10 @@ public class Game {
     /********** end of user **********/
 
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "developer_id")
-    private Developer developer;
+//    @JsonIgnore
+//    @ManyToOne
+//    @JoinColumn(name = "developer_id")
+//    private Developer developer;
 
 
 
@@ -143,6 +147,14 @@ public class Game {
 
     public void setDeveloperList(List<Developer> developerList) {
         this.developerList = developerList;
+    }
+
+    public List<Publisher> getPublisherList() {
+        return publisherList;
+    }
+
+    public void setPublisherList(List<Publisher> publisherList) {
+        this.publisherList = publisherList;
     }
 }
 

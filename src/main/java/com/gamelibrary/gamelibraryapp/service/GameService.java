@@ -10,6 +10,7 @@ import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
+import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
 import com.gamelibrary.gamelibraryapp.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ public class GameService {
     private GameRepository gameRepository;
     private DeveloperRepository developerRepository;
     private GenreRepository genreRepository;
+    private PublisherRepository publisherRepository;
 
     @Autowired
     public void setGameRepository(GameRepository gameRepository) {
@@ -39,8 +41,14 @@ public class GameService {
         this.developerRepository = developerRepository;
     }
 
+    @Autowired
     public void setGenreRepository(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
+    }
+
+    @Autowired
+    public void setPublisherRepository(PublisherRepository publisherRepository) {
+        this.publisherRepository = publisherRepository;
     }
 
     public List<Game> getGames() {
@@ -84,7 +92,7 @@ public class GameService {
         LOGGER.info("calling updateGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
-        if (game != null) {
+        if (game == null) {
             throw new InformationExistException("game with id " + gameId + " already exist");
         } else {
 
@@ -305,5 +313,95 @@ public class GameService {
         }
         developerRepository.deleteById(developer.get().getId());
     }
+
+    public List<Publisher> getPublishers(Long gameId) {
+        LOGGER.info("Calling getPublishers method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("game with id " + gameId + " " +
+                    "not belongs to this user or game does not exist");
+        }
+        return game.getPublisherList();
+    }
+
+    //Get specific publisher in the model
+    public Publisher getPublisher(Long gameId,Long publisherId) {
+        LOGGER.info("Calling getPublisher method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("game with id " + gameId +
+                    " not belongs to this user or game does not exist");
+        }
+        Optional<Publisher> publisher = publisherRepository.findByGameId(
+                gameId).stream().filter(p -> p.getId().equals(publisherId)).findFirst();
+        if (!publisher.isPresent()) {
+            throw new InformationNotFoundException("publisher with id " + publisherId +
+                    " not belongs to this user or publisher does not exist");
+        }
+        return publisher.get();
+    }
+
+    //Create a publisher in the model
+    public Publisher createPublisher(Long gameId,Publisher publisherObject) {
+        LOGGER.info("Calling createPublisher method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException(
+                    "game with id " + gameId + " not belongs to this user or game does not exist");
+        }
+        Publisher publisher = publisherRepository.findByNameAndUserId(publisherObject.getName(), userDetails.getUser().getId());
+        if (publisher != null) {
+            throw new InformationExistException("publisher with name " + publisher.getName() + " already exists");
+        }
+        publisherObject.setUser(userDetails.getUser());
+        publisherObject.setGame(game);
+        return publisherRepository.save(publisherObject);
+    }
+
+
+    //Update publisher in the publisher model
+    public Publisher updatePublisher(Long gameId,Long publisherId, Publisher publisherObject) {
+        LOGGER.info("Calling updatePublisher method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (gameId == null) {
+            throw new InformationNotFoundException("game with id " + gameId + " does not exist");
+        }
+        Optional<Publisher> publisher = publisherRepository.findByGameId(gameId).stream()
+                .filter(i -> i.getId().equals(publisherId)).findFirst();
+        if (!publisher.isPresent()) {
+            throw new InformationNotFoundException("publisher with id " + publisherId + " does not exist");
+        }
+        Publisher publisher1 = publisherRepository.findByUserIdAndNameAndIdIsNot(userDetails.getUser().getId(),
+                publisherObject.getName(), publisherId);
+        if (publisher1 != null) {
+            throw new InformationExistException("publisher with name " + publisher1.getName() + " already exists");
+        } else {
+            publisher.get().setName(publisherObject.getName());
+            return publisherRepository.save(publisher.get());
+        }
+    }
+
+    //Delete a publisher from the publisher model.
+    public void deletePublisher(Long gameId,Long publisherId) {
+        LOGGER.info("Calling deletePublisher method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game== null) {
+            throw new InformationNotFoundException("game with id " + gameId +
+                    " not belongs to this user or game does not exist");
+        }
+        Optional<Publisher> publisher = publisherRepository.findByGameId(
+                gameId).stream().filter(p -> p.getId().equals(publisherId)).findFirst();
+        if (!publisher.isPresent()) {
+            throw new InformationNotFoundException("publisher with id " + publisherId +
+                    " not belongs to this user or publisher does not exist");
+        }
+        publisherRepository.deleteById(publisher.get().getId());
+    }
+
 
 }
