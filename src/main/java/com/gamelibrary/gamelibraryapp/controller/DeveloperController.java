@@ -58,10 +58,10 @@ public class DeveloperController {
 
 
     //Create a developer
-    @PostMapping(path = "/developer/")
-    public Developer createDeveloper(@RequestBody Developer developerObject) {
+    @PostMapping(path = "/publisher/{publisherId}/developer/")
+    public Developer createDeveloper(@PathVariable Long publisherId,@RequestBody Developer developerObject) {
         LOGGER.info("calling createDeveloper method from controller");
-        return developerService.createDeveloper(developerObject);
+        return developerService.createDeveloper(publisherId, developerObject);
     }
 
     //Update a single developer

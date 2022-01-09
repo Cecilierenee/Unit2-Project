@@ -5,6 +5,7 @@ import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
 import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
+import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import com.gamelibrary.gamelibraryapp.repository.PublisherRepository;
@@ -80,11 +81,17 @@ public class DeveloperService {
 
 
 
-    public Developer createDeveloper(Developer developerObject) {
+    public Developer createDeveloper(Long publisherId,Developer developerObject) {
         LOGGER.info("calling createDeveloper method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        developerObject.setUser(userDetails.getUser());
-        return developerRepository.save(developerObject);
+        Optional<Publisher> publisher = publisherRepository.findById(publisherId);
+        if (publisher.isPresent()){
+            Developer developer = createDeveloper(publisherId,developerObject);
+            developer.setPublisher(publisher.get());
+            return developerRepository.save(developer);
+        }else{
+            throw new InformationNotFoundException("publisher with id " + publisherId + " is not found");
+        }
     }
 
     public Developer updateDeveloper(Long developerId,  Developer developerObject) {

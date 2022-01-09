@@ -3,7 +3,9 @@ package com.gamelibrary.gamelibraryapp.service;
 
 import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
+import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
+import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
@@ -29,16 +31,16 @@ public class GameService {
     private GenreRepository genreRepository;
 
     @Autowired
-    public void setGameRepository(GameRepository gameRepository){
+    public void setGameRepository(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 
     @Autowired
-    public void setDeveloperRepository(DeveloperRepository developerRepository){
+    public void setDeveloperRepository(DeveloperRepository developerRepository) {
         this.developerRepository = developerRepository;
     }
 
-    public void setGenreRepository(GenreRepository genreRepository){
+    public void setGenreRepository(GenreRepository genreRepository) {
         this.genreRepository = genreRepository;
     }
 
@@ -46,9 +48,9 @@ public class GameService {
         LOGGER.info("calling getGames method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Game> game = gameRepository.findByUserId(userDetails.getUser().getId());
-        if(game.isEmpty()){
+        if (game.isEmpty()) {
             throw new InformationNotFoundException("No games found for user id " + userDetails.getUser().getId());
-        }else{
+        } else {
             return game;
         }
 
@@ -66,23 +68,34 @@ public class GameService {
         }
     }
 
-    public Game createGame(Game gameObject) {
+    public Game createGame(Long developerId, Long genreId, Game gameObject) {
         LOGGER.info("calling createGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Game game = gameRepository.findByUserIdAndName(userDetails.getUser().getId(), gameObject.getName());
-        if (game != null) {
-            throw new InformationExistException("Game with name " + game.getName() + " already exists");
-        } else {
-            gameObject.setUser(userDetails.getUser());
-            return gameRepository.save(gameObject);
+        Developer developer = developerRepository.findByIdAndUserId(userDetails.getUser().getId(), developerId);
+        if (developer == null) {
+            throw new InformationNotFoundException("developer with id " + developerId + " not found");
         }
+        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser().getId());
+        if (genre == null) {
+            throw new InformationNotFoundException("genre with id " + genreId + " not found");
+        }
+        Game game = gameRepository.findByUserIdAndName(userDetails.getUser().getId(), gameObject.getName());
+        if (game != null){
+            throw new InformationNotFoundException("game with name " + gameObject.getName() + " already exists");
     }
+        gameObject.setDeveloper(developer);
+        gameObject.setGenre(genre);
+        gameObject.setUser(userDetails.getUser());
+        return gameRepository.save(gameObject);
+
+
+}
 
     public Game updateGame(Long gameId,Game gameObject) {
         LOGGER.info("calling updateGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
-        if (game == null) {
+        if (game != null) {
                 throw new InformationExistException("game with id " + gameId + " already exist");
             } else {
 
@@ -99,7 +112,7 @@ public class GameService {
         LOGGER.info("calling deleteGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
-        if (game == null) {
+        if (game != null) {
             gameRepository.deleteById(gameId);
             return game;
         } else {

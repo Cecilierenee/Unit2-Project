@@ -43,12 +43,12 @@ public class User {
     // user can have more than one genre
     @OneToMany(mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Genre> genreList;
+    private List<Genre> genreListList;
 
-    // user can have more than one game
+    // user can have more than one publisher
     @OneToMany(mappedBy = "user")
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Publisher> publisherList;
+    private List<Publisher> publisherListList;
 
 
     public UserProfile getUserProfile() {

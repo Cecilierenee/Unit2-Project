@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 
 @Service
 public class UserService {
-
     private UserRepository userRepository;
     private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
 
@@ -35,11 +34,12 @@ public class UserService {
     @Autowired
     private UserDetailsService userDetailsService;
 
+
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
 
     public User createUser(User userObject){
         LOGGER.info("calling createUser method from service");
@@ -57,6 +57,7 @@ public class UserService {
         final String jwt = jwtUtils.generateToken(userDetails);
         return ResponseEntity.ok(new LoginResponse(jwt));
     }
+
 
     public User findUserByEmailAddress(String email){
         return userRepository.findUserByEmailAddress(email);
