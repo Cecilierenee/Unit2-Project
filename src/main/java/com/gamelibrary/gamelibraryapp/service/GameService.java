@@ -71,7 +71,7 @@ public class GameService {
     public Game createGame(Long developerId, Long genreId, Game gameObject) {
         LOGGER.info("calling createGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Developer developer = developerRepository.findByIdAndUserId(userDetails.getUser().getId(), developerId);
+        Developer developer = developerRepository.findByIdAndUserId(developerId,userDetails.getUser().getId());
         if (developer == null) {
             throw new InformationNotFoundException("developer with id " + developerId + " not found");
         }

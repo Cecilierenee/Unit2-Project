@@ -70,7 +70,7 @@ public class DeveloperService {
     public Developer getDeveloper(Long developerId) {
         LOGGER.info("calling getDeveloper method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Developer> developer = Optional.ofNullable(developerRepository.findByIdAndUserId(developerId, userDetails.getUser().getId()));
+        Optional<Developer> developer = developerRepository.findByIdAndUserId(developerId, userDetails.getUser().getId());
         if (developer.isPresent()) {
             return developer.get();
         } else {
@@ -97,20 +97,19 @@ public class DeveloperService {
     public Developer updateDeveloper(Long developerId,  Developer developerObject) {
         LOGGER.info("calling updateDeveloper method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Developer developer = developerRepository.findByIdAndUserId(developerId, userDetails.getUser().getId());
-        if (developer == null) {
-                throw new InformationExistException("developer with id  " + developerId + " not found");
-            } else {
-                developer.setName(developerObject.getName());
-                developer.setUser(userDetails.getUser());
-                return developerRepository.save(developer);
-            }
+        Developer developer = getDeveloper(developerId);
+        if(developer != null){
+            developer.setName(developerObject.getName());
+            return developerRepository.save(developer);
+        }else{
+            throw new InformationNotFoundException("developer with id " + developerId + " is not found");
+        }
     }
 
     public void deleteDeveloper(Long developerId) {
         LOGGER.info("calling deleteDeveloper method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Developer developer = developerRepository.findByIdAndUserId(developerId, userDetails.getUser().getId());
+        Optional<Developer> developer = developerRepository.findByIdAndUserId(developerId, userDetails.getUser().getId());
         if(developer == null){
             throw new InformationNotFoundException("developer with id " + developerId + " does not exist or belong to this user");
         }else{
