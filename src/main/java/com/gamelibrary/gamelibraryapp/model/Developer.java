@@ -21,6 +21,12 @@ public class Developer {
     @Column
     private String name;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
+
+
 
    @OneToMany(mappedBy = "developer", orphanRemoval = true)
    @LazyCollection(LazyCollectionOption.FALSE)
@@ -91,7 +97,13 @@ public class Developer {
         this.gameList = gameList;
     }
 
+    public void setGame(Game game){
+        this.game = game;
+    }
 
+    public Game getGame() {
+        return game;
+    }
 
 
 }

@@ -19,18 +19,11 @@ public class Genre {
     @Column
     private String name;
 
-
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
 
-
-
-    @OneToMany(mappedBy = "genre", orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Game> gameList;
 
     /********** add user **********/
     // many categories belong to a one user
@@ -73,14 +66,6 @@ public class Genre {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Game> getGameList() {
-        return gameList;
-    }
-
-    public void setGameList(List<Game> gameList) {
-        this.gameList = gameList;
     }
 
     public void setGame(Game game){

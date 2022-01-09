@@ -1,5 +1,6 @@
 package com.gamelibrary.gamelibraryapp.controller;
 
+import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.service.GameService;
@@ -103,4 +104,67 @@ public class GameController {
         responseMessage.put("status", "genre with id: " + genreId + " was successfully deleted.");
         return new ResponseEntity<HashMap>(responseMessage, HttpStatus.OK);
     }
+
+
+    //Get all developers
+    @GetMapping(path = "/game/{gameId}/developer/")
+    public List<Developer> getDevelopers(@PathVariable(value = "gameId") Long gameId) {
+        LOGGER.info("calling getDevelopers method from controller");
+        return gameService.getDevelopers(gameId);
+
+    }
+
+    //Get a Single developer
+    @GetMapping(path = "/game/{gameId}/developer/{developerId}")
+    public Developer getDeveloper(@PathVariable(value = "gameId")Long gameId, @PathVariable Long developerId) {
+        LOGGER.info("calling getDeveloper method from controller");
+        return gameService.getDeveloper(gameId,developerId);
+    }
+
+    //Get all games from a developer
+//    @GetMapping(path = "/game/{gameId}/developer/{developerId}/")
+//    public List<Game> getDeveloperGames(@PathVariable(value = "gameId")Long gameId, @PathVariable Long developerId) {
+//        LOGGER.info("calling getDeveloperGames method from controller");
+//        return gameService.getDeveloperGames(developerId);
+//    }
+//
+//    //Get single game from a developer
+//    @GetMapping(path = "/game/{gameId}/developer/{developerId}/")
+//    public Game getDeveloperGame(@PathVariable(value = "gameId")Long gameId, @PathVariable Long developerId){
+//        LOGGER.info("calling getDeveloperGame method from controller");
+//        return gameService.getDeveloperGame(gameId,developerId);
+//    }
+
+
+    //Create a developer
+    @PostMapping(path = "game/{gameId}/developer/")
+    public Developer createDeveloper(@PathVariable(value = "gameId") Long gameId,@RequestBody Developer developerObject) {
+        LOGGER.info("calling createDeveloper method from controller");
+        return gameService.createDeveloper(gameId, developerObject);
+    }
+
+    //Update a single developer
+    @PutMapping(path = "/game/{gameId}/developer/{developerId}/")
+    public Developer updateDeveloper(@PathVariable(value = "gameId")Long gameId, @PathVariable Long developerId, @RequestBody Developer developerObject) {
+        LOGGER.info("calling updateDeveloper method from controller");
+        return gameService.updateDeveloper(gameId,developerId,developerObject);
+
+    }
+
+    //delete a single developer
+    @DeleteMapping(path = "/developer/{developerId}")
+    public ResponseEntity<HashMap> deleteDeveloper(@PathVariable(value = "gameId")Long gameId, @PathVariable(value = "developerId") Long developerId) {
+        LOGGER.info("calling deleteDeveloper method from controller");
+        gameService.deleteDeveloper(gameId,developerId);
+        HashMap responseMessage = new HashMap();
+        responseMessage.put("status", "developer with id: " + developerId + " was successfully deleted.");
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+
+    }
+
+
+
+
+
+
 }

@@ -3,8 +3,10 @@ package com.gamelibrary.gamelibraryapp.service;
 
 import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
+import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
+import com.gamelibrary.gamelibraryapp.model.Publisher;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
 import com.gamelibrary.gamelibraryapp.repository.GameRepository;
 import com.gamelibrary.gamelibraryapp.repository.GenreRepository;
@@ -163,12 +165,12 @@ public class GameService {
         Optional<Genre> genre = genreRepository.findByGameId(gameId).stream()
                 .filter(i -> i.getId().equals(genreId)).findFirst();
         if (!genre.isPresent()) {
-            throw new InformationNotFoundException("item with id " + genreId + " does not exist");
+            throw new InformationNotFoundException("genre with id " + genreId + " does not exist");
         }
         Genre genre1 = genreRepository.findByUserIdAndNameAndIdIsNot(userDetails.getUser().getId(),
                 genreObject.getName(), genreId);
         if (genre1 != null) {
-            throw new InformationExistException("item with id " + genreId + " already exists");
+            throw new InformationExistException("genre with name " + genre1.getName() + " already exists");
         } else {
             genre.get().setName(genreObject.getName());
             return genreRepository.save(genre.get());
@@ -192,5 +194,116 @@ public class GameService {
     }
 
 
+    public List<Developer> getDevelopers(Long gameId) {
+        LOGGER.info("calling getDevelopers method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("game with id " + gameId + " " +
+                    "not belongs to this user or category does not exist");
+        }
+        return game.getDeveloperList();
+    }
+
+
+//    public List<Game> getDeveloperGames(Long gameId,Long developerId){
+//        LOGGER.info("calling getDeveloperGames method from service");
+//        Developer developer = getDeveloper(gameId,developerId);
+//        if(developer != null) {
+//            return developer.getGameList();
+//        }else{
+//            throw new InformationNotFoundException("The developer with id " + developerId + " does not exist");
+//        }
+//    }
+//
+//    public Game getDeveloperGame(Long developerId, Long gameId){
+//        LOGGER.info("calling getDeveloperGame method from service");
+//        Optional<Game> game = getDeveloperGames(gameId,developerId).stream().filter(x -> x.getId().equals(gameId)).findFirst();
+//        if (game.isPresent()){
+//            return game.get();
+//        }else{
+//            throw new InformationNotFoundException("The game with id " + gameId + " does not exist");
+//        }
+//
+//    }
+
+
+    public Developer getDeveloper(Long gameId,Long developerId) {
+        LOGGER.info("calling getDeveloper method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("game with id " + gameId +
+                    " not belongs to this user or category does not exist");
+        }
+        Optional<Developer> developer = developerRepository.findByGameId(
+                gameId).stream().filter(p -> p.getId().equals(developerId)).findFirst();
+        if (!developer.isPresent()) {
+            throw new InformationNotFoundException("developer with id " + developerId +
+                    " not belongs to this user or recipe does not exist");
+        }
+        return developer.get();
+    }
+
+
+
+
+    public Developer createDeveloper(Long gameId,Developer developerObject) {
+        LOGGER.info("calling createDeveloper method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("game with id " + gameId +
+                    " not belongs to this user or category does not exist");
+        }
+        Developer developer = developerRepository.findByNameAndUserId(developerObject.getName(),userDetails.getUser().getId());
+        if (developer != null) {
+            throw new InformationExistException("developer with name " + developer.getName() +
+                    " already exists");
+        }
+        developerObject.setUser(userDetails.getUser());
+        developerObject.setGame(game);
+        return developerRepository.save(developerObject);
+    }
+
+    public Developer updateDeveloper(Long gameId, Long developerId,  Developer developerObject) {
+        LOGGER.info("calling updateDeveloper method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("game with id " + gameId + " does not exist");
+        }
+        Optional<Developer> developer = developerRepository.findByGameId(developerId).stream()
+                .filter(i -> i.getId().equals(developerId)).findFirst();
+        if (!developer.isPresent()) {
+            throw new InformationNotFoundException("developer with id " + developerId + " does not exist");
+        }
+        Developer developer1 = developerRepository.findByUserIdAndNameAndIdIsNot(userDetails.getUser().getId(),
+                developerObject.getName(), developerId);
+        if (developer1 != null) {
+            throw new InformationExistException("developer with name " + developer1.getName() + " already exists");
+        } else {
+            developer.get().setName(developerObject.getName());
+            return developerRepository.save(developer.get());
+        }
+    }
+
+    public void deleteDeveloper(Long gameId,Long developerId) {
+        LOGGER.info("calling deleteDeveloper method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("game with id " + gameId +
+                    " not belongs to this user or category does not exist");
+        }
+        Optional<Developer> developer = developerRepository.findByGameId(
+                gameId).stream().filter(p -> p.getId().equals(gameId)).findFirst();
+        if (!developer.isPresent()) {
+            throw new InformationNotFoundException("developer with id " + developerId +
+                    " not belongs to this user or developer does not exist");
+        }
+        developerRepository.deleteById(developer.get().getId());
+    }
 
 }

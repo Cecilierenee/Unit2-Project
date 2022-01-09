@@ -35,6 +35,11 @@ public class Game {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Genre> genreList;
 
+
+    @OneToMany(mappedBy = "game", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Developer> developerList;
+
     /********** add user **********/
     // many categories belong to a one user
     @ManyToOne
@@ -42,6 +47,14 @@ public class Game {
     @JsonIgnore
     private User user;
     /********** end of user **********/
+
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "developer_id")
+    private Developer developer;
+
+
 
     /********** user getters and setters **********/
     public User getUser() {
@@ -122,4 +135,14 @@ public class Game {
     public void setGenreList(List<Genre> genreList) {
         this.genreList = genreList;
     }
+
+
+    public List<Developer> getDeveloperList() {
+        return developerList;
+    }
+
+    public void setDeveloperList(List<Developer> developerList) {
+        this.developerList = developerList;
+    }
 }
+
