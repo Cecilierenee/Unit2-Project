@@ -3,7 +3,6 @@ package com.gamelibrary.gamelibraryapp.service;
 
 import com.gamelibrary.gamelibraryapp.exception.InformationExistException;
 import com.gamelibrary.gamelibraryapp.exception.InformationNotFoundException;
-import com.gamelibrary.gamelibraryapp.model.Developer;
 import com.gamelibrary.gamelibraryapp.model.Game;
 import com.gamelibrary.gamelibraryapp.model.Genre;
 import com.gamelibrary.gamelibraryapp.repository.DeveloperRepository;
@@ -13,8 +12,6 @@ import com.gamelibrary.gamelibraryapp.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 import java.util.List;
@@ -68,44 +65,34 @@ public class GameService {
         }
     }
 
-    public Game createGame(Long developerId, Long genreId, Game gameObject) {
+    public Game createGame(Game gameObject) {
         LOGGER.info("calling createGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Developer developer = developerRepository.findByIdAndUserId(developerId,userDetails.getUser().getId());
-        if (developer == null) {
-            throw new InformationNotFoundException("developer with id " + developerId + " not found");
-        }
-        Genre genre = genreRepository.findByIdAndUserId(genreId, userDetails.getUser().getId());
-        if (genre == null) {
-            throw new InformationNotFoundException("genre with id " + genreId + " not found");
-        }
         Game game = gameRepository.findByUserIdAndName(userDetails.getUser().getId(), gameObject.getName());
-        if (game != null){
-            throw new InformationNotFoundException("game with name " + gameObject.getName() + " already exists");
+        if (game != null) {
+            throw new InformationExistException("game with name " + game.getName() + " already exists");
+        } else {
+            gameObject.setUser(userDetails.getUser());
+            return gameRepository.save(gameObject);
+        }
     }
-        gameObject.setDeveloper(developer);
-        gameObject.setGenre(genre);
-        gameObject.setUser(userDetails.getUser());
-        return gameRepository.save(gameObject);
 
 
-}
-
-    public Game updateGame(Long gameId,Game gameObject) {
+    public Game updateGame(Long gameId, Game gameObject) {
         LOGGER.info("calling updateGame method from service");
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
         if (game != null) {
-                throw new InformationExistException("game with id " + gameId + " already exist");
-            } else {
+            throw new InformationExistException("game with id " + gameId + " already exist");
+        } else {
 
-                game.setName(gameObject.getName());
-                game.setDescription(gameObject.getDescription());
-                game.setPrice(gameObject.getPrice());
-                game.setRating(gameObject.getRating());
-                game.setReleaseDate(gameObject.getReleaseDate());
-                return gameRepository.save(game);
-            }
+            game.setName(gameObject.getName());
+            game.setDescription(gameObject.getDescription());
+            game.setPrice(gameObject.getPrice());
+            game.setRating(gameObject.getRating());
+            game.setReleaseDate(gameObject.getReleaseDate());
+            return gameRepository.save(game);
+        }
     }
 
     public Game deleteGame(Long gameId) {
@@ -120,5 +107,90 @@ public class GameService {
         }
 
     }
+
+    public List<Genre> getGenres(Long gameId) {
+        LOGGER.info("Calling getGenre method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("game with id " + gameId + " " +
+                    "not belongs to this user or category does not exist");
+        }
+        return game.getGenreList();
+    }
+
+    public Genre getGenre(Long gameId, Long genreId) {
+        LOGGER.info("Calling getGenre method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("Game with id  " + gameId + " does not exist or does not belong to user");
+        }
+        Optional<Genre> genre = genreRepository.findByGameId(
+                gameId).stream().filter(p -> p.getId().equals(genreId)).findFirst();
+        if (!genre.isPresent()) {
+            throw new InformationNotFoundException("genre with id " + genreId +
+                    " not belongs to this user or item does not exist");
+        }
+        return genre.get();
+    }
+
+
+    public Genre createGenre(Long gameId, Genre genreObject) {
+        LOGGER.info("Calling createGenre method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException(
+                    "game with id " + gameId + " not belongs to this user or game does not exist");
+        }
+        Genre genre = genreRepository.findByNameAndUserId(genreObject.getName(), userDetails.getUser().getId());
+        if (genre != null) {
+            throw new InformationExistException("genre with name " + genre.getName() + " already exists");
+        }
+        genreObject.setUser(userDetails.getUser());
+        genreObject.setGame(game);
+        return genreRepository.save(genreObject);
+    }
+
+    public Genre updateGenre(Long gameId, Long genreId, Genre genreObject) {
+        LOGGER.info("Calling updateGenre method from service");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("category with id " + gameId + " does not exist");
+        }
+        Optional<Genre> genre = genreRepository.findByGameId(gameId).stream()
+                .filter(i -> i.getId().equals(genreId)).findFirst();
+        if (!genre.isPresent()) {
+            throw new InformationNotFoundException("item with id " + genreId + " does not exist");
+        }
+        Genre genre1 = genreRepository.findByUserIdAndNameAndIdIsNot(userDetails.getUser().getId(),
+                genreObject.getName(), genreId);
+        if (genre1 != null) {
+            throw new InformationExistException("item with id " + genreId + " already exists");
+        } else {
+            genre.get().setName(genreObject.getName());
+            return genreRepository.save(genre.get());
+        }
+    }
+
+    public void deleteGenre(Long gameId, Long genreId) {
+        LOGGER.info("Calling deleteGenre method from controller");
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Game game = gameRepository.findByIdAndUserId(gameId, userDetails.getUser().getId());
+        if (game == null) {
+            throw new InformationNotFoundException("Game with " + gameId + " does not exist");
+        }
+        Optional<Genre> genre = genreRepository.findByGameId(
+                gameId).stream().filter(p -> p.getId().equals(genreId)).findFirst();
+        if (!genre.isPresent()) {
+            throw new InformationNotFoundException("genre with id " + gameId +
+                    " not belongs to this user or item does not exist");
+        }
+        genreRepository.deleteById(genre.get().getId());
+    }
+
+
 
 }

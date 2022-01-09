@@ -21,6 +21,13 @@ public class Genre {
 
 
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
+
+
+
     @OneToMany(mappedBy = "genre", orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Game> gameList;
@@ -74,5 +81,13 @@ public class Genre {
 
     public void setGameList(List<Game> gameList) {
         this.gameList = gameList;
+    }
+
+    public void setGame(Game game){
+        this.game = game;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

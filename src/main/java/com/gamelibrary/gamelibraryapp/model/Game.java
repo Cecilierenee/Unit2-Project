@@ -1,8 +1,11 @@
 package com.gamelibrary.gamelibraryapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "games")
@@ -28,15 +31,9 @@ public class Game {
     @Column
     private char rating;
 
-@JsonIgnore
-@ManyToOne
-@JoinColumn(name = "developer_id")
-private Developer developer;
-
-@JsonIgnore
-@ManyToOne
-@JoinColumn(name = "genre_id")
-private Genre genre;
+    @OneToMany(mappedBy = "game", orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Genre> genreList;
 
     /********** add user **********/
     // many categories belong to a one user
@@ -118,19 +115,11 @@ private Genre genre;
         this.rating = rating;
     }
 
-    public Developer getDeveloper() {
-        return developer;
+    public List<Genre> getGenreList() {
+        return genreList;
     }
 
-    public void setDeveloper(Developer developer) {
-        this.developer = developer;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
+    public void setGenreList(List<Genre> genreList) {
+        this.genreList = genreList;
     }
 }
