@@ -45,7 +45,7 @@ public class GameController {
     @PostMapping(path = "/developer/{developerId}/genre/{genreId}/game/")
     public Game createGame(@PathVariable Long developerId,@PathVariable Long genreId,@RequestBody Game gameObject) {
         LOGGER.info("calling createGame method from controller");
-        return gameService.createGame(gameObject);
+        return gameService.createGame(developerId, genreId, gameObject);
     }
 
     //Update a single game
