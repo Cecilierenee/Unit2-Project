@@ -56,14 +56,14 @@ We want to build a working database with four models: Game, Genre, Developer, an
 |--------------|------|--------|----------------|--------|-------------|
 |GET | /game|Get all games|None|Public| |
 |GET| /game{gameid}|Get single game|None|Public| |
-|POST| /game|Create single game|None|Public| | 
+|POST| /developer/{developerId}/genre/{genreId}/game/|Create single game|None|Public| | 
 |PUT| /game/{gameid}|Update single game|None|Public||
 |DELETE| /game/{gameid}| Delete single game|None|Public||
 |GET| /developer|Get all developers|None|Public||
 |GET| /developer/{developerid}|Get single developer|None|Public||
 |GET| /developer/{developerid}/game|Get all games created by a single developer|None|Public||
 |GET| /developer/{developerid}/game/{gameid}|Get single game single developer|None|Public||
-|POST| /developer|Create single developer|None|Public||
+|POST| /publisher/{publisherId}/developer/|Create single developer|None|Public||
 |PUT| /developer/{developerid}|Update single developer|None|Public||
 |DELETE| /developer/{developerid}|Delete single developer|None|Public||
 |GET| /publisher|Get all publishers|None|Public||
