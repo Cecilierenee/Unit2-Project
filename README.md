@@ -50,28 +50,30 @@ We want to build a working database with four models: Game, Genre, Developer, an
  
 ## /EndPoints
 
-| Request Type | Url  | Action | Request Header | Access | Request Body|
+| Request Type | Url  | Action | Request Body | Access | Request Header|
 |--------------|------|--------|----------------|--------|-------------|
-|GET | /game|Get all games|None|Public| |
-|GET| /game{gameid}|Get single game|None|Public| |
-|POST| /game/|Create single game|None|Public| | 
-|PUT| /game/{gameid}|Update single game|None|Public||
-|DELETE| /game/{gameid}| Delete single game|None|Public||
-|GET| /game/{gameId}/developer/|Get all developers|None|Public||
-|GET| /game/{gameId}/developer/{developerId}|Get single developer|None|Public||
-|POST| game/{gameId}/developer/|Create single developer|None|Public||
-|PUT| /game/{gameId}/developer/{developerId}/|Update single developer|None|Public||
-|DELETE| /game/{gameId}/developer/{developerId}|Delete single developer|None|Public||
-|GET| /game/{gameId}/publisher|Get all publishers|None|Public||
-|GET| /game/{gameId}/publisher/{publisherId}|Get single publisher|None|Public||
-|POST| /game/{gameId}/publisher|Create single publisher|None|Public||
-|PUT| /game/{gameId}/publisher/{publisherId}|Update single publisher|None|Public||
-|DELETE| /game/{gameId}/publisher/{publisherId}|Delete single publisher|None|Public||
-|GET| /game/{gameId}/genre|Get all genres|None|Public||
-|GET| /game/{gameId}/genre/{genreId}|Get single genre|None|Public||
-|POST| /game/{gameId}/genre|Create a genre|None|Public||
-|PUT| /game/{gameId}/genre/{genreId}|Update a genre|None|Public||
-|DELETE| /game/{gameId}/genre/{genreId}|Delete a genre|None|Public||
+|GET | /game|Get all games|None|Public|Authorization Bearer TOKEN |
+|GET| /game{gameid}|Get single game|None|Public|Authorization Bearer TOKEN |
+|POST| /game/|Create single game|None|Public|Authorization Bearer TOKEN | 
+|PUT| /game/{gameid}|Update single game|None|Public|Authorization Bearer TOKEN|
+|DELETE| /game/{gameid}| Delete single game|None|Public|Authorization Bearer TOKEN|
+|GET| /game/{gameId}/developer/|Get all developers|None|Public|Authorization Bearer TOKEN|
+|GET| /game/{gameId}/developer/{developerId}|Get single developer|None|Public|Authorization Bearer TOKEN|
+|POST| game/{gameId}/developer/|Create single developer|None|Public|Authorization Bearer TOKEN|
+|PUT| /game/{gameId}/developer/{developerId}/|Update single developer|None|Public|Authorization Bearer TOKEN|
+|DELETE| /game/{gameId}/developer/{developerId}|Delete single developer|None|Public|Authorization Bearer TOKEN|
+|GET| /game/{gameId}/publisher|Get all publishers|None|Private|Authorization Bearer TOKEN|
+|GET| /game/{gameId}/publisher/{publisherId}|Get single publisher|None|Private|Authorization Bearer TOKEN|
+|POST| /game/{gameId}/publisher|Create single publisher|Game info|Private|Authorization Bearer TOKEN|
+|PUT| /game/{gameId}/publisher/{publisherId}|Update single publisher|Game info|Private|Authorization Bearer TOKEN|
+|DELETE| /game/{gameId}/publisher/{publisherId}|Delete single publisher|None|Private|Authorization Bearer TOKEN|
+|GET| /game/{gameId}/genre|Get all genres|None|Private|Authorization Bearer TOKEN|
+|GET| /game/{gameId}/genre/{genreId}|Get single genre|None|Private|Authorization Bearer TOKEN|
+|POST| /game/{gameId}/genre|Create a genre|Genre info|Private|Authorization Bearer TOKEN|
+|PUT| /game/{gameId}/genre/{genreId}|Update a genre|None|Private|Authorization Bearer TOKEN|
+|DELETE| /game/{gameId}/genre/{genreId}|Delete a genre|None|Private|Authorization Bearer TOKEN|
+|POST| /auth/users/register|Registers a user|User info|Public|None|
+|POST| /auth/users/login|Logs a user in|User infor|Public|None|
 
 ## ERD
 ![ERD](https://user-images.githubusercontent.com/89564513/148717801-a844bacf-f929-4000-b1b7-7c959173c417.jpeg)
