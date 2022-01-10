@@ -56,27 +56,25 @@ We want to build a working database with four models: Game, Genre, Developer, an
 |--------------|------|--------|----------------|--------|-------------|
 |GET | /game|Get all games|None|Public| |
 |GET| /game{gameid}|Get single game|None|Public| |
-|POST| /developer/{developerId}/genre/{genreId}/game/|Create single game|None|Public| | 
+|POST| /game/|Create single game|None|Public| | 
 |PUT| /game/{gameid}|Update single game|None|Public||
 |DELETE| /game/{gameid}| Delete single game|None|Public||
-|GET| /developer|Get all developers|None|Public||
-|GET| /developer/{developerid}|Get single developer|None|Public||
-|GET| /developer/{developerid}/game|Get all games created by a single developer|None|Public||
-|GET| /developer/{developerid}/game/{gameid}|Get single game single developer|None|Public||
-|POST| /publisher/{publisherId}/developer/|Create single developer|None|Public||
-|PUT| /developer/{developerid}|Update single developer|None|Public||
-|DELETE| /developer/{developerid}|Delete single developer|None|Public||
-|GET| /publisher|Get all publishers|None|Public||
-|GET| /publisher/{publisherid}|Get single publisher|None|Public||
-|POST| /publisher|Create single publisher|None|Public||
-|PUT| /publisher/{publisherid}|Update single publisher|None|Public||
-|DELETE| /publisher/{publisherid}|Delete single publisher|None|Public||
-|GET| /genre|Get all genres|None|Public||
-|GET| /genre/{genreid}|Get single genre|None|Public||
+|GET| /game/{gameId}/developer/|Get all developers|None|Public||
+|GET| /game/{gameId}/developer/{developerId}|Get single developer|None|Public||
+|POST| game/{gameId}/developer/|Create single developer|None|Public||
+|PUT| /game/{gameId}/developer/{developerId}/|Update single developer|None|Public||
+|DELETE| /game/{gameId}/developer/{developerId}|Delete single developer|None|Public||
+|GET| /game/{gameId}/publisher|Get all publishers|None|Public||
+|GET| /game/{gameId}/publisher/{publisherId}|Get single publisher|None|Public||
+|POST| /game/{gameId}/publisher|Create single publisher|None|Public||
+|PUT| /game/{gameId}/publisher/{publisherId}|Update single publisher|None|Public||
+|DELETE| /game/{gameId}/publisher/{publisherId}|Delete single publisher|None|Public||
+|GET| /game/{gameId}/genre|Get all genres|None|Public||
+|GET| /game/{gameId}/genre/{genreId}|Get single genre|None|Public||
 |Get| /genre/{genreid}/game|Get all games within a single genre|None|Public||
-|POST| /genre|Create a genre|None|Public||
-|PUT| /genre/{genreid}|Update a genre|None|Public||
-|DELETE| /genre/{genreid}|Delete a genre|None|Public||
+|POST| /game/{gameId}/genre|Create a genre|None|Public||
+|PUT| /game/{gameId}/genre/{genreId}|Update a genre|None|Public||
+|DELETE| /game/{gameId}/genre/{genreId}|Delete a genre|None|Public||
 
 ## ERD
 ![ERD](https://user-images.githubusercontent.com/89564513/148717801-a844bacf-f929-4000-b1b7-7c959173c417.jpeg)
@@ -92,13 +90,29 @@ We want to build a working database with four models: Game, Genre, Developer, an
   -To make things simple, we set up our Repository and built the skeloton of our app.<br>
   -We also communicated clearly on how we wanted to use git to mangage the project, to ensure we didn't have any hiccups.<br>
 3. We split the work, and created each model needed and their respective service and controller classes.<br>
+  -Added the necessary depedacies to the POM.xl file.
   -While doing so, we included exception handeling as well.<br>
+4. We ran into the issue of of endpoints not quite giving us the results we were expecting. To solve this, istead of having four seprate controllers to handle each model, we went with the *Game Controller* & *Game Service* handleing all of our CRUD methods.
+5. Ended up adding the ability to have a gamer register and login to their database using JSON web Tokens. <br>
+  -Tested endpoints and achieved MVP! <br>
   
   
-  
-  
-  
-  
-  
-  ## Resources
+## Resources & Technologies
+
+1. IntelliJ 
+2. Spring Boot
+3. Maven
+4. postgres
+5. PgAdmin
+6. JWT
+7. Postman (Testing endpoints)
+8. Canva (for ReadMe graphics)
+9. (ERD)
+
+## Installation 
+
+1. Fork and Clone the Repo
+2. Create a Database called *project2*
+3. Open project and change application dev properties to reflect your username and password in Pgadmin, change to the correct port number
+4. Run the application and open the Url
 
