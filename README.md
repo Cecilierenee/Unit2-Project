@@ -71,7 +71,6 @@ We want to build a working database with four models: Game, Genre, Developer, an
 |DELETE| /game/{gameId}/publisher/{publisherId}|Delete single publisher|None|Public||
 |GET| /game/{gameId}/genre|Get all genres|None|Public||
 |GET| /game/{gameId}/genre/{genreId}|Get single genre|None|Public||
-|Get| /genre/{genreid}/game|Get all games within a single genre|None|Public||
 |POST| /game/{gameId}/genre|Create a genre|None|Public||
 |PUT| /game/{gameId}/genre/{genreId}|Update a genre|None|Public||
 |DELETE| /game/{gameId}/genre/{genreId}|Delete a genre|None|Public||
