@@ -79,7 +79,7 @@ We want to build a working database with four models: Game, Genre, Developer, an
 |DELETE| /genre/{genreid}|Delete a genre|None|Public||
 
 ## ERD
-![ERD](https://user-images.githubusercontent.com/89564513/148101262-90f32935-b756-4592-9b11-83e70f491fcc.png)
+![ERD](https://user-images.githubusercontent.com/89564513/148717801-a844bacf-f929-4000-b1b7-7c959173c417.jpeg)
 
 
 ## The Process
