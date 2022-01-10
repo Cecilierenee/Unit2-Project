@@ -104,7 +104,7 @@ We want to build a working database with four models: Game, Genre, Developer, an
 6. JWT
 7. Postman (Testing endpoints)
 8. Canva (for ReadMe graphics)
-9. (ERD)
+9. LucidChart - ERD
 
 ## Installation 
 
